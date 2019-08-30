@@ -64,6 +64,7 @@
 #define CMD_TRANSLATE        0xFFFFFF27
 #define CMD_VIDEOFRAME       0xFFFFFF41
 #define CMD_VIDEOSTART       0xFFFFFF40
+#define CMD_DISPLAY          0x00000000
 
 #define DLSWAP_FRAME         2UL
 

@@ -48,23 +48,25 @@ void Eve2Display::begin() {
 
   // touch & audio config
   wr16(RAM_REG + REG_TOUCH_RZTHRESH,  1200);    // set touch resistance threshold
-   wr8(RAM_REG + REG_TOUCH_MODE,      0x02);    // set touch on: continous - this is default
-   wr8(RAM_REG + REG_TOUCH_ADC_MODE,  0x01);    // set ADC mode: differential - this is default
-   wr8(RAM_REG + REG_TOUCH_OVERSAMPLE,15);      // set touch oversampling to max
+  wr8(RAM_REG  + REG_TOUCH_MODE,      0x02);    // set touch on: continous - this is default
+  wr8(RAM_REG  + REG_TOUCH_ADC_MODE,  0x01);    // set ADC mode: differential - this is default
+  wr8(RAM_REG  + REG_TOUCH_OVERSAMPLE,15);      // set touch oversampling to max
 
   wr16(RAM_REG + REG_PWM_HZ  ,  0x00FA);        // Backlight PWM frequency
-   wr8(RAM_REG + REG_PWM_DUTY , 0x7F);          // Backlight PWM duty (off)
+  wr8(RAM_REG +  REG_PWM_DUTY , 0x7F);          // Backlight PWM duty (off)
 
-   wr8(RAM_REG + REG_GPIO_DIR,0x80 | rd8(RAM_REG + REG_GPIO_DIR));
-   wr8(RAM_REG + REG_GPIO,0x080 | rd8(RAM_REG + REG_GPIO));//enable display bit
+  wr8(RAM_REG +  REG_GPIO_DIR,0x80 | rd8(RAM_REG + REG_GPIO_DIR));
+  wr8(RAM_REG +  REG_GPIO,0x080 | rd8(RAM_REG + REG_GPIO));//enable display bit
 
   // make display list with bluescreen
 
-   wr32(RAM_DL+0, CLEAR_COLOR_RGB(0,100,0));
-   wr32(RAM_DL+4, CLEAR(1,1,1));
-   wr32(RAM_DL+8, DISPLAY());
-   wr8(RAM_REG + REG_DLSWAP, DLSWAP_FRAME);          // swap display lists
-   wr8(RAM_REG + REG_PCLK, 5);                       // after this display is visible on the LCD
+  wr32(RAM_DL+0, CLEAR_COLOR_RGB(0,100,0));
+  wr32(RAM_DL+4, CLEAR(1,1,1));
+  wr32(RAM_DL+8, DISPLAY());
+  wr8(RAM_REG  + REG_DLSWAP, DLSWAP_FRAME);          // swap display lists
+  wr8(RAM_REG  + REG_PCLK, 5);                       // after this display is visible on the LCD
+
+  ramCommandOffset = 0;
 }
 
 void Eve2Display::hostCommand(uint8_t command) {
@@ -152,4 +154,28 @@ void Eve2Display::spiEnable() {
 void Eve2Display::spiDisable() {
   digitalWrite(pinCS, HIGH);
   SPI.endTransaction();
+}
+
+void Eve2Display::dlStart() {
+  commandIndex = 0;
+  commands[commandIndex++] = CMD_DLSTART;
+}
+
+void Eve2Display::dlEnd() {
+  uint32_t reg_cmd_write = 0x000080B0; // little endian ( RAM_CMD + REG_CMD_WRITE | 0x80 flipped)
+
+  commands[commandIndex++] = CMD_DISPLAY;
+  commands[commandIndex++] = CMD_SWAP;
+
+  ramCommandOffset += commandIndex * FT_CMD_SIZE;
+  ramCommandOffset %= FT_CMD_FIFO_SIZE;
+
+// you were here
+
+
+  // update reg_cmd_write to start co-processor
+  spiEnable();
+  SPI.write(&reg_cmd_write,3); // should send 0xB08000 with write bit MSB set 0x80
+  SPI.write(&ramCommandOffset,FT_CMD_SIZE);
+  spiDisable();
 }
