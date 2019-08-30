@@ -2,6 +2,8 @@
 #define EVE2_43
 #include "Eve2Display.h"
 
+SPISettings spiSettings(20000000, MSBFIRST, SPI_MODE0);  
+
 Eve2Display::Eve2Display(int cs, int pdn, int audio) {
   pinCS     = cs;
   pinPDN    = pdn;
@@ -66,28 +68,88 @@ void Eve2Display::begin() {
 }
 
 void Eve2Display::hostCommand(uint8_t command) {
+  spiEnable();
+  SPI.transfer(command);
+  SPI.transfer(0x00);
+  SPI.transfer(0x00);
+  spiDisable();
 }
 
 uint8_t  Eve2Display::rd8(uint32_t address) {
+  uint8_t buf[1];
+  spiEnable();
+  uint8_t *a = (uint8_t*)&address;
+  SPI.write((uint8_t)(a[2]&0x3F));  
+  SPI.write((uint8_t)a[1]);      
+  SPI.write((uint8_t)a[0]);              
+  SPI.write(0x00); // dummy
+  SPI.read(buf, 1);
+  spiDisable();
+  return buf[0];
 }
 
 uint16_t Eve2Display::rd16(uint32_t address) {
+  uint8_t buf[2];
+  spiEnable();
+  uint8_t *a = (uint8_t*)&address;
+  SPI.write((uint8_t)(a[2]&0x3F));  
+  SPI.write((uint8_t)a[1]);      
+  SPI.write((uint8_t)a[0]);              
+  SPI.write(0x00); // dummy
+  SPI.read(buf, 2);
+  spiDisable();
+  return buf[0] + ((uint16_t)buf[1] << 8);
 }
 
 uint32_t Eve2Display::rd32(uint32_t address) {
+  uint8_t buf[4];
+  spiEnable();
+  uint8_t *a = (uint8_t*)&address;
+  SPI.write((uint8_t)(a[2]&0x3F));  
+  SPI.write((uint8_t)a[1]);      
+  SPI.write((uint8_t)a[0]);              
+  SPI.write(0x00); // dummy
+  SPI.read(buf, 4);
+  spiDisable();
+  return buf[0] + ((uint32_t)buf[1] << 8) + ((uint32_t)buf[2] << 16) + ((uint32_t)buf[3] << 24);
 }
 
 void Eve2Display::wr8(uint32_t address, uint8_t parameter) {
+  uint8_t *a = (uint8_t*)&address;
+  spiEnable();
+  SPI.write((uint8_t)(a[2]&0x3F | 0x80));  
+  SPI.write((uint8_t)a[1]);      
+  SPI.write((uint8_t)a[0]);              
+  SPI.write(parameter);
+  spiDisable();
 }
 
 void Eve2Display::wr16(uint32_t address, uint16_t parameter) {
+  uint8_t *a = (uint8_t*)&address;
+  spiEnable();
+  SPI.write((uint8_t)a[2]&0x3F | 0x80); 
+  SPI.write((uint8_t)a[1]); 
+  SPI.write((uint8_t)a[0]);
+  SPI.write(&parameter,2);
+  spiDisable();
 }
 
 void Eve2Display::wr32(uint32_t address, uint32_t parameter) {
+  uint8_t *a = (uint8_t*)&address;
+  spiEnable();
+  SPI.write((uint8_t)(a[2]&0x3F | 0x80));  
+  SPI.write((uint8_t)a[1]);     
+  SPI.write((uint8_t)a[0]);              
+  SPI.write(&parameter,4);
+  spiDisable();
 }
 
 void Eve2Display::spiEnable() {
+  SPI.beginTransaction(spiSettings);
+  digitalWrite(pinCS, LOW);
 }
 
 void Eve2Display::spiDisable() {
+  digitalWrite(pinCS, HIGH);
+  SPI.endTransaction();
 }
