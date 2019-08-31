@@ -18,22 +18,19 @@ void setup() {
   display.dlEnd();
 }
 
-uint16_t i;
+int inc = 3;
+int i = inc;
 void loop() {
   char line[100];
-  uint32_t s = micros();
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(0,255,0));
-  display.dial(150,150,100,0,i);
-  display.cmd(COLOR_RGB(255,255,255));
-  sprintf(line,"count=%u",i);
-  display.text(0,0,1,0,line);
-  display.text(200,20,21,0,line);
+  display.cmd(COLOR_RGB(255,0,0));
+  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK,10,10,i,100);
   display.dlEnd();
 
-  console.println(micros() - s);
-  i += 1 << 10;
+  if ((i > 100) || (i < 1)) inc = -inc;
+  i += inc;
+
   delay(20);
 }
 

@@ -1,7 +1,5 @@
 #include <SPI.h>
-#define EVE2_43
 #include "Eve2Display.h"
-#include "eve2.h"
 
 SPISettings spiSettings(20000000, MSBFIRST, SPI_MODE0);  
 #define console Serial1
@@ -77,6 +75,10 @@ void Eve2Display::begin() {
   sprintf(line,"%X%X",rd8(CHIP_ID),rd8(CHIP_ID+1));
   console.println(line);
 */
+  height = VSIZE;
+  width =  HSIZE;
+  center = HSIZE/2;
+  middle = VSIZE/2;
 }
 
 void Eve2Display::hostCommand(uint8_t command) {
@@ -263,6 +265,12 @@ void Eve2Display::log(uint8_t level,char *msg, uint32_t v) {
 }
 
 /* -- widgets ------------------------------------------------------ */
+void Eve2Display::romfont(uint32_t font, uint32_t romslot) {
+  cmd(CMD_ROMFONT);
+  cmd(font);
+  cmd(romslot);
+}
+
 void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val) {
   cmd(CMD_DIAL);
   cmd(((uint32_t)y << 16) | x );
@@ -274,15 +282,18 @@ void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uin
 void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str) {
   uint16_t len = strlen(str);
   cmd(CMD_TEXT);
-  cmd( ((uint32_t)y << 16) | x );
-  cmd( ((uint32_t)options << 16) | font );
+  cmd(((uint32_t)y       << 16) | x );
+  cmd(((uint32_t)options << 16) | font );
   memcpy(&commands[commandIndex],str,len);  // this only works with little endian
   commandIndex += len/4;
   cmd(0x00); // null terminate this str
 }
 
-void Eve2Display::romfont(uint32_t font, uint32_t romslot) {
-  cmd(CMD_ROMFONT);
-  cmd(font);
-  cmd(romslot);
+void Eve2Display::gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range) {
+  cmd(CMD_GAUGE);
+  cmd(((uint32_t)y       << 16) | x );
+  cmd(((uint32_t)options << 16) | r );
+  cmd(((uint32_t)minor   << 16) | major );
+  cmd(((uint32_t)range   << 16) | val );
 }
+

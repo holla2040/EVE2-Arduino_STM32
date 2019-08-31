@@ -2,6 +2,14 @@
 #define _EVE_H
 /* pulled from matrix orbital's EVE-School repo https://github.com/MatrixOrbital/EVE-School */
 
+//User selectable configurations.
+//#define EVE2_70
+//#define EVE2_50
+#define EVE2_43
+//#define EVE2_38
+//#define EVE2_35
+//#define EVE2_29
+
 #define HCMD_ACTIVE      0x00
 #define HCMD_STANDBY     0x41
 #define HCMD_SLEEP       0x42
@@ -258,13 +266,6 @@
 // Non FTDI Helper Macros
 #define MAKE_COLOR(r,g,b) (( r << 16) | ( g << 8) | (b))
 
-//User selectable configurations.
-//#define EVE2_70
-//#define EVE2_50
-//#define EVE2_43
-//#define EVE2_38
-//#define EVE2_35
-//#define EVE2_29
 
 #ifdef EVE2_70
 #define HCYCLE     928

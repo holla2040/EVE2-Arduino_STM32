@@ -9,21 +9,26 @@ enum {SILENT,FATAL,ERROR,WARNING,INFO,DEBUG,DEBUG1,DEBUG2,VERBOSE};
 class Eve2Display {
   public:  
     Eve2Display(int cs, int pdn, int audio); 
+    uint16_t center, middle;
+    uint16_t height, width;
     void begin();
     void hostCommand(uint8_t command);
     void dlStart();
     void dlEnd();
     void cmd(uint32_t command);
 
-    void dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val);
-    void text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str);
-    void romfont(uint32_t font, uint32_t romslot);
-
+    /* debug */
     void test();
     void printRAM_DL();
     void printRAM_CMD(uint32_t address, uint16_t length);
     void printCommands();
     void log(uint8_t level, char *msg, uint32_t v);
+
+    /* widgets */
+    void romfont(uint32_t font, uint32_t romslot);
+    void gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range);
+    void dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val);
+    void text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str);
 
   private:
     int pinCS;
