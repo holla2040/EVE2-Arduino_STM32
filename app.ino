@@ -24,8 +24,10 @@ void loop() {
   char line[100];
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255,0,0));
-  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK,10,10,i,100);
+  display.cmd(COLOR_RGB(255,255,255));
+  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOPOINTER,10,10,i,100);
+  display.cmd(COLOR_RGB(255, 0, 0));
+  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOTICKS,10,10,i,100);
   display.dlEnd();
 
   if ((i > 100) || (i < 1)) inc = -inc;
