@@ -210,8 +210,10 @@ void Eve2Display::dlEnd() {
   SPI.write(a[0]);              
   SPI.write(&ramCommandOffset,FT_CMD_SIZE);
   spiDisable();
+  // printRAM_CMD(RAM_CMD,40);
 }
 
+/* -- debug ------------------------------------------------------ */
 void Eve2Display::test() {
   console.println("test");
   dlStart();
@@ -278,17 +280,6 @@ void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uin
   cmd((uint32_t)val );
 }
 
-
-void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str) {
-  uint16_t len = strlen(str);
-  cmd(CMD_TEXT);
-  cmd(((uint32_t)y       << 16) | x );
-  cmd(((uint32_t)options << 16) | font );
-  memcpy(&commands[commandIndex],str,len);  // this only works with little endian
-  commandIndex += len/4;
-  cmd(0x00); // null terminate this str
-}
-
 void Eve2Display::gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range) {
   cmd(CMD_GAUGE);
   cmd(((uint32_t)y       << 16) | x );
@@ -296,4 +287,22 @@ void Eve2Display::gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, ui
   cmd(((uint32_t)minor   << 16) | major );
   cmd(((uint32_t)range   << 16) | val );
 }
+
+void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str) {
+  uint16_t len = strlen(str);
+  cmd(CMD_TEXT);
+  cmd(((uint32_t)y       << 16) | x );
+  cmd(((uint32_t)options << 16) | font );
+  memcpy(&commands[commandIndex],str,len+1);  // this only works with little endian, it does null terminate if len NOT % FT_CMD_SIZE
+  commandIndex += len/4;
+  if (len % FT_CMD_SIZE) { 
+    // otherwise we did a fractional write BUT it already includes the null but commandIndex is sly by 1 because of int division above
+    commandIndex++;
+  } else { 
+    // len % FT_CMD_SIZE so we to add a null termination command
+    cmd(0x00); // null terminate this str
+  }
+  
+}
+
 
