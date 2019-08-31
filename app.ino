@@ -17,12 +17,20 @@ void setup() {
 
 uint16_t i;
 void loop() {
-    display.dlStart();
-    display.cmd(CLEAR(1,1,1));
-    display.cmd(COLOR_RGB(0,255,0));
-    display.dial(150,150,100,0,i);
-    display.dlEnd();
-    i += 1024;
-    delay(20);
+  char line[100];
+  uint32_t s = micros();
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(0,255,0));
+  display.dial(150,150,100,0,i);
+  display.cmd(COLOR_RGB(255,255,255));
+  sprintf(line,"count=%u",i);
+  display.text(0,0,31,0,line);
+  display.text(200,20,21,0,line);
+  display.dlEnd();
+
+  console.println(micros() - s);
+  i += 1 << 10;
+  delay(20);
 }
 

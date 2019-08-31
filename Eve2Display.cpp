@@ -220,12 +220,6 @@ void Eve2Display::test() {
   dlEnd();
 }
 
-void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val) {
-  cmd(CMD_DIAL);
-  cmd(((uint32_t)y << 16) | x );
-  cmd(((uint32_t)options << 16) | r );
-  cmd((uint32_t)val );
-}
 
 void Eve2Display::printRAM_DL() {
   char temp[100];
@@ -267,3 +261,23 @@ void Eve2Display::log(uint8_t level,char *msg, uint32_t v) {
     console.println(line);
   }
 }
+
+/* -- widgets ------------------------------------------------------ */
+void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val) {
+  cmd(CMD_DIAL);
+  cmd(((uint32_t)y << 16) | x );
+  cmd(((uint32_t)options << 16) | r );
+  cmd((uint32_t)val );
+}
+
+
+void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str) {
+  uint16_t len = strlen(str);
+  cmd(CMD_TEXT);
+  cmd( ((uint32_t)y << 16) | x );
+  cmd( ((uint32_t)options << 16) | font );
+  memcpy(&commands[commandIndex],str,len);  // this only works with little endian
+  commandIndex += len/4;
+  cmd(0x00); // null terminate this str
+}
+
