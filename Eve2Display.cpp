@@ -305,4 +305,21 @@ void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, 
   
 }
 
+void Eve2Display::button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str) {
+  uint16_t len = strlen(str);
+  cmd(CMD_BUTTON);
+  cmd(((uint32_t)y << 16) | x ); // Put two 16 bit values together into one 32 bit value - do it little endian
+  cmd(((uint32_t)h << 16) | w );
+  cmd(((uint32_t)options << 16) | font );
+  memcpy(&commands[commandIndex],str,len+1);  // this only works with little endian, it does null terminate if len NOT % FT_CMD_SIZE
+  commandIndex += len/4;
+  if (len % FT_CMD_SIZE) { 
+    // otherwise we did a fractional write BUT it already includes the null but commandIndex is sly by 1 because of int division above
+    commandIndex++;
+  } else { 
+    // len % FT_CMD_SIZE so we to add a null termination command
+    cmd(0x00); // null terminate this str
+  }
+}
+
 

@@ -4,6 +4,10 @@
 
 #define console Serial1
 
+int inc = 2;
+int i = 0;
+char line[100];
+
 // Eve2Display(int cs, int pdn, int audio); 
 Eve2Display display(PA4,PA3,PA2);
 
@@ -21,10 +25,21 @@ void setup() {
   display.dlEnd();
 }
 
-int inc = 2;
-int i = 0;
 void loop() {
-  char line[100];
+  button();
+  //gauge();
+}
+
+void button() {
+  console.println("button");
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.button(display.center,display.middle,150,50,31,OPT_CENTER,"button");
+  display.dlEnd();
+  delay(1000);
+}
+
+void gauge() {
   sprintf(line,"%d",i);
 
   display.dlStart();
@@ -46,4 +61,3 @@ void loop() {
 
   delay(20);
 }
-
