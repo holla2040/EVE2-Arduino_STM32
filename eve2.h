@@ -47,6 +47,7 @@
 #define CMD_PROGRESS         0xFFFFFF0F
 #define CMD_REGREAD          0xFFFFFF19
 #define CMD_ROTATE           0xFFFFFF29
+#define CMD_ROMFONT          0xFFFFFF3F
 #define CMD_SCALE            0xFFFFFF28
 #define CMD_SCREENSAVER      0xFFFFFF2F
 #define CMD_SCROLLBAR        0xFFFFFF11

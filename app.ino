@@ -13,6 +13,9 @@ void setup() {
   console.println("\nEVE2-Arduino_STM32 setup");
 
   display.begin();
+  display.dlStart();
+  display.romfont(1,34);
+  display.dlEnd();
 }
 
 uint16_t i;
@@ -25,7 +28,7 @@ void loop() {
   display.dial(150,150,100,0,i);
   display.cmd(COLOR_RGB(255,255,255));
   sprintf(line,"count=%u",i);
-  display.text(0,0,31,0,line);
+  display.text(0,0,1,0,line);
   display.text(200,20,21,0,line);
   display.dlEnd();
 

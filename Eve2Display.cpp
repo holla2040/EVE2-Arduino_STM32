@@ -281,3 +281,8 @@ void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, 
   cmd(0x00); // null terminate this str
 }
 
+void Eve2Display::romfont(uint32_t font, uint32_t romslot) {
+  cmd(CMD_ROMFONT);
+  cmd(font);
+  cmd(romslot);
+}
