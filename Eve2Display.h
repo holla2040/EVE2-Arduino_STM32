@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include "eve2.h"
 
+enum {SILENT,FATAL,ERROR,WARNING,INFO,DEBUG,DEBUG1,DEBUG2,VERBOSE};
+
 class Eve2Display {
   public:  
     Eve2Display(int cs, int pdn, int audio); 
@@ -11,6 +13,15 @@ class Eve2Display {
     void hostCommand(uint8_t command);
     void dlStart();
     void dlEnd();
+    void cmd(uint32_t command);
+
+    void dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val);
+
+    void test();
+    void printRAM_DL();
+    void printRAM_CMD(uint32_t address, uint16_t length);
+    void printCommands();
+    void log(uint8_t level, char *msg, uint32_t v);
 
   private:
     int pinCS;
@@ -19,6 +30,8 @@ class Eve2Display {
     int pinMOSI;
     int pinMISO;
     int pinCLK;
+
+    uint8_t logLevel;
 
     uint8_t rd8(uint32_t address);
     uint16_t rd16(uint32_t address);

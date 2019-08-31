@@ -12,6 +12,8 @@
 #define HCMD_CLK36M      0x61
 #define HCMD_CORERESET   0x68
 
+#define CHIP_ID              0x000C0000
+
 #define CMD_APPEND           0xFFFFFF1E
 #define CMD_BGCOLOR          0xFFFFFF09
 #define CMD_BUTTON           0xFFFFFF0D

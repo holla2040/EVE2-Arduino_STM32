@@ -1,8 +1,10 @@
 #include <SPI.h>
 #define EVE2_43
 #include "Eve2Display.h"
+#include "eve2.h"
 
 SPISettings spiSettings(20000000, MSBFIRST, SPI_MODE0);  
+#define console Serial1
 
 Eve2Display::Eve2Display(int cs, int pdn, int audio) {
   pinCS     = cs;
@@ -20,6 +22,7 @@ void Eve2Display::begin() {
 
   digitalWrite(pinPDN, HIGH);
   digitalWrite(pinPDN, LOW);
+  delay(1);
   digitalWrite(pinPDN, HIGH);
 
   hostCommand(HCMD_CLKEXT);
@@ -60,13 +63,20 @@ void Eve2Display::begin() {
 
   // make display list with bluescreen
 
-  wr32(RAM_DL+0, CLEAR_COLOR_RGB(0,100,0));
+  wr32(RAM_DL+0, CLEAR_COLOR_RGB(0,0,0));
   wr32(RAM_DL+4, CLEAR(1,1,1));
   wr32(RAM_DL+8, DISPLAY());
   wr8(RAM_REG  + REG_DLSWAP, DLSWAP_FRAME);          // swap display lists
   wr8(RAM_REG  + REG_PCLK, 5);                       // after this display is visible on the LCD
 
   ramCommandOffset = 0;
+
+/*
+  should print 813
+  char line[100];
+  sprintf(line,"%X%X",rd8(CHIP_ID),rd8(CHIP_ID+1));
+  console.println(line);
+*/
 }
 
 void Eve2Display::hostCommand(uint8_t command) {
@@ -81,9 +91,9 @@ uint8_t  Eve2Display::rd8(uint32_t address) {
   uint8_t buf[1];
   spiEnable();
   uint8_t *a = (uint8_t*)&address;
-  SPI.write((uint8_t)(a[2]&0x3F));  
-  SPI.write((uint8_t)a[1]);      
-  SPI.write((uint8_t)a[0]);              
+  SPI.write(a[2]&0x3F);  
+  SPI.write(a[1]);      
+  SPI.write(a[0]);              
   SPI.write(0x00); // dummy
   SPI.read(buf, 1);
   spiDisable();
@@ -94,9 +104,9 @@ uint16_t Eve2Display::rd16(uint32_t address) {
   uint8_t buf[2];
   spiEnable();
   uint8_t *a = (uint8_t*)&address;
-  SPI.write((uint8_t)(a[2]&0x3F));  
-  SPI.write((uint8_t)a[1]);      
-  SPI.write((uint8_t)a[0]);              
+  SPI.write((a[2]&0x3F));  
+  SPI.write(a[1]);      
+  SPI.write(a[0]);              
   SPI.write(0x00); // dummy
   SPI.read(buf, 2);
   spiDisable();
@@ -107,9 +117,9 @@ uint32_t Eve2Display::rd32(uint32_t address) {
   uint8_t buf[4];
   spiEnable();
   uint8_t *a = (uint8_t*)&address;
-  SPI.write((uint8_t)(a[2]&0x3F));  
-  SPI.write((uint8_t)a[1]);      
-  SPI.write((uint8_t)a[0]);              
+  SPI.write(a[2]&0x3F);  
+  SPI.write(a[1]);      
+  SPI.write(a[0]);              
   SPI.write(0x00); // dummy
   SPI.read(buf, 4);
   spiDisable();
@@ -119,9 +129,9 @@ uint32_t Eve2Display::rd32(uint32_t address) {
 void Eve2Display::wr8(uint32_t address, uint8_t parameter) {
   uint8_t *a = (uint8_t*)&address;
   spiEnable();
-  SPI.write((uint8_t)(a[2]&0x3F | 0x80));  
-  SPI.write((uint8_t)a[1]);      
-  SPI.write((uint8_t)a[0]);              
+  SPI.write(a[2]&0x3F | 0x80);  
+  SPI.write(a[1]);      
+  SPI.write(a[0]);              
   SPI.write(parameter);
   spiDisable();
 }
@@ -129,9 +139,9 @@ void Eve2Display::wr8(uint32_t address, uint8_t parameter) {
 void Eve2Display::wr16(uint32_t address, uint16_t parameter) {
   uint8_t *a = (uint8_t*)&address;
   spiEnable();
-  SPI.write((uint8_t)a[2]&0x3F | 0x80); 
-  SPI.write((uint8_t)a[1]); 
-  SPI.write((uint8_t)a[0]);
+  SPI.write(a[2]&0x3F | 0x80); 
+  SPI.write(a[1]); 
+  SPI.write(a[0]);
   SPI.write(&parameter,2);
   spiDisable();
 }
@@ -139,9 +149,9 @@ void Eve2Display::wr16(uint32_t address, uint16_t parameter) {
 void Eve2Display::wr32(uint32_t address, uint32_t parameter) {
   uint8_t *a = (uint8_t*)&address;
   spiEnable();
-  SPI.write((uint8_t)(a[2]&0x3F | 0x80));  
-  SPI.write((uint8_t)a[1]);     
-  SPI.write((uint8_t)a[0]);              
+  SPI.write(a[2]&0x3F | 0x80);  
+  SPI.write(a[1]);     
+  SPI.write(a[0]);              
   SPI.write(&parameter,4);
   spiDisable();
 }
@@ -158,24 +168,102 @@ void Eve2Display::spiDisable() {
 
 void Eve2Display::dlStart() {
   commandIndex = 0;
-  commands[commandIndex++] = CMD_DLSTART;
+  cmd(CMD_DLSTART);
+}
+
+void Eve2Display::cmd(uint32_t command) {
+  commands[commandIndex++] = command;
 }
 
 void Eve2Display::dlEnd() {
-  uint32_t reg_cmd_write = 0x000080B0; // little endian ( RAM_CMD + REG_CMD_WRITE | 0x80 flipped)
+/*
+  first write commands to RAM_CMD (4K circular co-process command buffer), then
+  REG_CMD_WRITE is updated with 4k circular buffer offset, which is commandSize (u32) * 4 in bytes
+*/
+  uint32_t address;
+  uint8_t *a = (uint8_t*)&address;
+  uint32_t commandsSize; // in bytes
 
-  commands[commandIndex++] = CMD_DISPLAY;
-  commands[commandIndex++] = CMD_SWAP;
+  cmd(CMD_DISPLAY);
+  cmd(CMD_SWAP);
 
-  ramCommandOffset += commandIndex * FT_CMD_SIZE;
-  ramCommandOffset %= FT_CMD_FIFO_SIZE;
+  commandsSize = commandIndex * FT_CMD_SIZE; // this is byte count
 
-// you were here
+  address = RAM_CMD + ramCommandOffset; // ramCommandOffset is where we left off last time
 
-
-  // update reg_cmd_write to start co-processor
   spiEnable();
-  SPI.write(&reg_cmd_write,3); // should send 0xB08000 with write bit MSB set 0x80
+  SPI.write(a[2]&0x3F | 0x80);  
+  SPI.write(a[1]);     
+  SPI.write(a[0]);              
+  SPI.write(&commands,commandsSize);
+  spiDisable();
+
+  ramCommandOffset += commandsSize;
+  ramCommandOffset %= FT_CMD_FIFO_SIZE; // ramCommandOffset is where we should write next time
+  address = RAM_REG + REG_CMD_WRITE; 
+
+  spiEnable();
+  SPI.write(a[2]&0x3F | 0x80);  
+  SPI.write(a[1]);     
+  SPI.write(a[0]);              
   SPI.write(&ramCommandOffset,FT_CMD_SIZE);
   spiDisable();
+}
+
+void Eve2Display::test() {
+  console.println("test");
+  dlStart();
+  cmd(CLEAR(1,1,1));
+  cmd(COLOR_RGB(192,26,26));
+  //dial(50,50,20,0,37);
+  dial(150,150,40,0,37);
+  dlEnd();
+}
+
+void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val) {
+  cmd(CMD_DIAL);
+  cmd(((uint32_t)y << 16) | x );
+  cmd(((uint32_t)options << 16) | r );
+  cmd((uint32_t)val );
+}
+
+void Eve2Display::printRAM_DL() {
+  char temp[100];
+  console.println("\nRAM_DL");
+  console.println("-----------------------");
+  for (uint32_t a = RAM_DL;a < (RAM_DL + 100);a += 4) {
+    sprintf(temp,"0x%08X 0x%08X",a,rd32(a));
+    console.println(temp);
+  }
+  console.println();
+}
+
+void Eve2Display::printCommands() {
+  char temp[100];
+  console.println("\ncommands");
+  console.println("-----------------------");
+  for (uint32_t i = 0;i < commandIndex;i++) {
+    sprintf(temp,"0x%-3d 0x%08X",i,commands[i]);
+    console.println(temp);
+  }
+  console.println();
+}
+
+void Eve2Display::printRAM_CMD(uint32_t address, uint16_t length) {
+  char temp[100];
+  console.println("\nRAM_CMD");
+  console.println("-----------------------");
+  for (uint32_t i = 0;i < length;i++) {
+  sprintf(temp,"0x%08X 0x%08X",address+i*FT_CMD_SIZE,rd32(address + i*FT_CMD_SIZE));
+    console.println(temp);
+  }
+  console.println();
+}
+
+void Eve2Display::log(uint8_t level,char *msg, uint32_t v) {
+  if (level >= logLevel) {
+    char line[100];
+    sprintf(line,"%-8d %-30s 0x%08X %u",millis(),msg,v,v);
+    console.println(line);
+  }
 }
