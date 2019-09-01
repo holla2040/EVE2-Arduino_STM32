@@ -322,4 +322,11 @@ void Eve2Display::button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_
   }
 }
 
+void Eve2Display::number(uint16_t x, uint16_t y, uint16_t font, uint16_t options, uint32_t num) {
+  cmd(CMD_NUMBER);
+  cmd(((uint32_t)y << 16) | x );
+  cmd(((uint32_t)options << 16) | font );
+  cmd(num);
+}
+
 

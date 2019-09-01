@@ -50,7 +50,7 @@
 #define CMD_MEMSET           0xFFFFFF1B
 #define CMD_MEMWRITE         0xFFFFFF1A
 #define CMD_MEMZERO          0xFFFFFF1C
-#define CMD_NUMBER           0xFFFFFF38
+#define CMD_NUMBER           0xFFFFFF2E
 #define CMD_PLAYVIDEO        0xFFFFFF3A
 #define CMD_PROGRESS         0xFFFFFF0F
 #define CMD_REGREAD          0xFFFFFF19

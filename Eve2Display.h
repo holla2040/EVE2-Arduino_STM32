@@ -30,6 +30,8 @@ class Eve2Display {
     void dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val);
     void text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str);
     void button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str);
+    void number(uint16_t x, uint16_t y, uint16_t font, uint16_t options, uint32_t num);
+
 
   private:
     int pinCS;

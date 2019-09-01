@@ -26,14 +26,24 @@ void setup() {
 }
 
 void loop() {
-  button();
+  number();
+  //button();
   //gauge();
 }
 
-void button() {
-  console.println("button");
+void number() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
+  display.number(display.center,display.middle,4,OPT_CENTER|OPT_SIGNED,i++);
+  display.dlEnd();
+  delay(100);
+}
+
+void button() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
   display.button(display.center,display.middle,150,50,31,OPT_CENTER,"button");
   display.dlEnd();
   delay(1000);
