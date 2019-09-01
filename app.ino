@@ -26,9 +26,20 @@ void setup() {
 }
 
 void loop() {
-  number();
+  slider();
+  //number();
   //button();
   //gauge();
+}
+
+void slider() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
+  display.slider(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
+  display.dlEnd();
+  i += 5;
+  delay(100);
 }
 
 void number() {

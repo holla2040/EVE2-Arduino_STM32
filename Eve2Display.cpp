@@ -329,4 +329,11 @@ void Eve2Display::number(uint16_t x, uint16_t y, uint16_t font, uint16_t options
   cmd(num);
 }
 
+void Eve2Display::slider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range) { 
+  cmd(CMD_SLIDER);
+  cmd(((uint32_t)y << 16) | x );
+  cmd(((uint32_t)h << 16) | w );
+  cmd(((uint32_t)val << 16) | options );
+  cmd((uint32_t)range );
+}
 
