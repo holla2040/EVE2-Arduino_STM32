@@ -273,6 +273,16 @@ void Eve2Display::romfont(uint32_t font, uint32_t romslot) {
   cmd(romslot);
 }
 
+void Eve2Display::fgcolor(uint32_t color) {
+  cmd(CMD_FGCOLOR);
+  cmd(color);
+}
+
+void Eve2Display::bgcolor(uint32_t color) {
+  cmd(CMD_BGCOLOR);
+  cmd(color);
+}
+
 void Eve2Display::cmdString(const char *str) {
   uint16_t len = strlen(str);
   memcpy(&commands[commandIndex],str,len+1);  // this only works with little endian, it does null terminate if len NOT % FT_CMD_SIZE
@@ -289,100 +299,100 @@ void Eve2Display::cmdString(const char *str) {
 
 void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val) {
   cmd(CMD_DIAL);
-  cmd(((uint32_t)y << 16) | x );
-  cmd(((uint32_t)options << 16) | r );
-  cmd((uint32_t)val );
+  cmd(((uint32_t)y << 16) | x);
+  cmd(((uint32_t)options << 16) | r);
+  cmd((uint32_t)val);
 }
 
 void Eve2Display::gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range) {
   cmd(CMD_GAUGE);
-  cmd(((uint32_t)y       << 16) | x );
-  cmd(((uint32_t)options << 16) | r );
-  cmd(((uint32_t)minor   << 16) | major );
-  cmd(((uint32_t)range   << 16) | val );
+  cmd(((uint32_t)y       << 16) | x);
+  cmd(((uint32_t)options << 16) | r);
+  cmd(((uint32_t)minor   << 16) | major);
+  cmd(((uint32_t)range   << 16) | val);
 }
 
 void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str) {
   cmd(CMD_TEXT);
-  cmd(((uint32_t)y       << 16) | x );
-  cmd(((uint32_t)options << 16) | font );
+  cmd(((uint32_t)y       << 16) | x);
+  cmd(((uint32_t)options << 16) | font);
   cmdString(str);
 }
 
 void Eve2Display::button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str) {
   cmd(CMD_BUTTON);
-  cmd(((uint32_t)y << 16) | x ); // Put two 16 bit values together into one 32 bit value - do it little endian
-  cmd(((uint32_t)h << 16) | w );
-  cmd(((uint32_t)options << 16) | font );
+  cmd(((uint32_t)y << 16) | x); 
+  cmd(((uint32_t)h << 16) | w);
+  cmd(((uint32_t)options << 16) | font);
   cmdString(str);
 }
 
 void Eve2Display::number(uint16_t x, uint16_t y, uint16_t font, uint16_t options, uint32_t num) {
   cmd(CMD_NUMBER);
-  cmd(((uint32_t)y << 16) | x );
-  cmd(((uint32_t)options << 16) | font );
+  cmd(((uint32_t)y << 16) | x);
+  cmd(((uint32_t)options << 16) | font);
   cmd(num);
 }
 
 void Eve2Display::slider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range) { 
   cmd(CMD_SLIDER);
-  cmd(((uint32_t)y << 16) | x );
-  cmd(((uint32_t)h << 16) | w );
-  cmd(((uint32_t)val << 16) | options );
-  cmd((uint32_t)range );
+  cmd(((uint32_t)y << 16) | x);
+  cmd(((uint32_t)h << 16) | w);
+  cmd(((uint32_t)val << 16) | options);
+  cmd((uint32_t)range);
 }
 
 
 void Eve2Display::toggle(uint16_t x, uint16_t y, uint16_t w, uint16_t font, uint16_t options, uint16_t state,const char *str) { 
   cmd(CMD_TOGGLE);
-  cmd(((uint32_t)y << 16) | x );
-  cmd(((uint32_t)w << 16) | font );
-  cmd(((uint32_t)options << 16) | state );
+  cmd(((uint32_t)y << 16) | x);
+  cmd(((uint32_t)font << 16) | w);
+  cmd(((uint32_t)state << 16) | options);
   cmdString(str);
 }
 
 void Eve2Display::progress(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range) { 
   cmd(CMD_PROGRESS);
-  cmd(((uint32_t)y << 16) | x );
-  cmd(((uint32_t)h << 16) | w );
-  cmd(((uint32_t)val << 16) | options );
-  cmd((uint32_t)range );
+  cmd(((uint32_t)y << 16) | x);
+  cmd(((uint32_t)h << 16) | w);
+  cmd(((uint32_t)val << 16) | options);
+  cmd((uint32_t)range);
 }
 
-void Eve2Display::scrollbar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range) { 
+void Eve2Display::scrollbar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t size,uint16_t range) { 
   cmd(CMD_SCROLLBAR);
-  cmd(((uint32_t)y << 16) | x );
-  cmd(((uint32_t)h << 16) | w );
-  cmd(((uint32_t)val << 16) | options );
-  cmd((uint32_t)range );
+  cmd(((uint32_t)y << 16) | x);
+  cmd(((uint32_t)h << 16) | w);
+  cmd(((uint32_t)val << 16) | options);
+  cmd(((uint32_t)range << 16) | size);
 }
 
 void Eve2Display::keys(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str) {
   cmd(CMD_KEYS);
-  cmd(((uint32_t)y << 16) | x ); // Put two 16 bit values together into one 32 bit value - do it little endian
-  cmd(((uint32_t)h << 16) | w );
-  cmd(((uint32_t)options << 16) | font );
+  cmd(((uint32_t)y << 16) | x); 
+  cmd(((uint32_t)h << 16) | w);
+  cmd(((uint32_t)options << 16) | font);
   cmdString(str);
 }
 
 void Eve2Display::clock(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t h, uint16_t m, uint16_t s, uint16_t ms) {
-  cmd(CMD_GAUGE);
-  cmd(((uint32_t)y       << 16) | x );
-  cmd(((uint32_t)options << 16) | r );
-  cmd(((uint32_t)h       << 16) | m );
-  cmd(((uint32_t)s       << 16) | ms );
+  cmd(CMD_CLOCK);
+  cmd(((uint32_t)y       << 16) | x);
+  cmd(((uint32_t)options << 16) | r);
+  cmd(((uint32_t)m       << 16) | h);
+  cmd(((uint32_t)ms      << 16) | s);
 }
 
 void Eve2Display::gradient(uint16_t x0, uint16_t y0, uint32_t rgb0, uint16_t x1, uint16_t y1, uint32_t rgb1) {
   cmd(CMD_GRADIENT);
-  cmd(((uint32_t)y0      << 16) | x0 );
+  cmd(((uint32_t)y0      << 16) | x0);
   cmd(rgb0);
-  cmd(((uint32_t)y1      << 16) | x1 );
+  cmd(((uint32_t)y1      << 16) | x1);
   cmd(rgb1);
 }
 
 void Eve2Display::spinner(uint16_t x, uint16_t y, uint16_t style, uint16_t scale) {
   cmd(CMD_SPINNER);
-  cmd(((uint32_t)y      << 16) | x );
-  cmd(((uint32_t)style   << 16) | scale );
+  cmd(((uint32_t)y       << 16) | x);
+  cmd(((uint32_t)scale   << 16) | style);
 }

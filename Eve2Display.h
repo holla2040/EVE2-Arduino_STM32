@@ -26,6 +26,8 @@ class Eve2Display {
 
     /* widgets */
     void romfont(uint32_t font, uint32_t romslot);
+    void fgcolor(uint32_t color);
+    void bgcolor(uint32_t color);
     void gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range);
     void dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val);
     void text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str);
@@ -34,12 +36,11 @@ class Eve2Display {
     void slider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range);
     void toggle(uint16_t x, uint16_t y, uint16_t w, uint16_t font, uint16_t options, uint16_t state,const char *str);
     void progress(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range);
-    void scrollbar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range);
+    void scrollbar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t size,uint16_t range);
     void keys(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str);
     void clock(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t h, uint16_t m, uint16_t s, uint16_t ms);
     void gradient(uint16_t x0, uint16_t y0, uint32_t rgb0, uint16_t x1, uint16_t y1, uint32_t rgb1);
     void spinner(uint16_t x, uint16_t y, uint16_t style, uint16_t scale);
-
 
   private:
     int pinCS;

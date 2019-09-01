@@ -22,14 +22,16 @@ void setup() {
   display.romfont(2,32);
   display.romfont(3,33);
   display.romfont(4,34);
+  display.fgcolor(0xFF0000);
+  display.bgcolor(0x001100);
   display.dlEnd();
 }
 
 void loop() {
-  spinner();
+  //spinner();
   //gradient();
   //keys();
-  //clock();
+  clock();
   //scrollbar();
   //progress();
   //toggle();
@@ -38,22 +40,23 @@ void loop() {
   //number();
   //button();
   //gauge();
+  //text();
 }
 
 void spinner() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
-  display.spinner(display.middle,display.width,0,0);
+  display.cmd(COLOR_RGB(255, 50, 255));
+  display.spinner(display.center,display.middle,0,2);
   display.dlEnd();
-  delay(1000);
 }
 
-void toggle() {
+void toggle() { // not functioning
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
-  display.toggle(display.middle,display.width,100,20,OPT_CENTER,(i++)&0x01,"no\xffyes");
+  console.println(i&0x01);
+  display.toggle(display.center,display.middle,80,30,0,((i++)&0x01)*65535,"yes\xFFno");
   display.dlEnd();
   delay(1000);
 }
@@ -62,7 +65,7 @@ void keys() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
-  display.toggle(display.middle,display.width,100,20,OPT_CENTER,(i++)%5,"ABCDE");
+  display.keys(display.center-200,display.middle-50,400,100,28,0,"ABCDE");
   display.dlEnd();
   delay(1000);
 }
@@ -81,8 +84,9 @@ void scrollbar() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
-  display.scrollbar(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
+  display.scrollbar(20,display.middle,display.width - 50,20,0,i%100,20,100);
   display.dlEnd();
+  console.println(i);
   i += 5;
   delay(100);
 }
@@ -91,7 +95,7 @@ void progress() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
-  display.slider(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
+  display.progress(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
   display.dlEnd();
   i += 5;
   delay(100);
@@ -152,7 +156,7 @@ void clock() {
   s += 3;
   s %= 60;
 
-  delay(100);
+  delay(50);
 }
 
 void gradient() {
@@ -161,5 +165,14 @@ void gradient() {
   display.gradient(10,10,COLOR_RGB(255, 255, 0), display.width-10,display.height-10,COLOR_RGB(0, 255, 255));
   display.dlEnd();
   delay(1000);
+}
+
+void text() {
+  sprintf(line,"helloworld %d",millis());
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.text(display.center,display.middle,30,OPT_CENTER,line);
+  display.dlEnd();
+  delay(47);
 }
 
