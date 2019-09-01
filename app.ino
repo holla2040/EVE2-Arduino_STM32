@@ -26,7 +26,8 @@ void setup() {
 }
 
 void loop() {
-  gradient();
+  spinner();
+  //gradient();
   //keys();
   //clock();
   //scrollbar();
@@ -37,6 +38,15 @@ void loop() {
   //number();
   //button();
   //gauge();
+}
+
+void spinner() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
+  display.spinner(display.middle,display.width,0,0);
+  display.dlEnd();
+  delay(1000);
 }
 
 void toggle() {

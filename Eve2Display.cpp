@@ -380,3 +380,9 @@ void Eve2Display::gradient(uint16_t x0, uint16_t y0, uint32_t rgb0, uint16_t x1,
   cmd(((uint32_t)y1      << 16) | x1 );
   cmd(rgb1);
 }
+
+void Eve2Display::spinner(uint16_t x, uint16_t y, uint16_t style, uint16_t scale) {
+  cmd(CMD_SPINNER);
+  cmd(((uint32_t)y      << 16) | x );
+  cmd(((uint32_t)style   << 16) | scale );
+}
