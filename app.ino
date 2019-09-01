@@ -146,7 +146,9 @@ uint8_t h,m,s;
 void clock() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.clock(display.center,display.middle,125,0,h,m,s,0);
+  display.clock(display.center,display.middle,125,OPT_FLAT|OPT_NOBACK|OPT_NOHANDS,h,m,s,0);
+  display.cmd(COLOR_RGB(255,0,0));
+  display.clock(display.center,display.middle,125,OPT_FLAT|OPT_NOBACK|OPT_NOTICKS,h,m,s,0);
   display.dlEnd();
 
   h += 1;
