@@ -273,6 +273,20 @@ void Eve2Display::romfont(uint32_t font, uint32_t romslot) {
   cmd(romslot);
 }
 
+void Eve2Display::cmdString(const char *str) {
+  uint16_t len = strlen(str);
+  memcpy(&commands[commandIndex],str,len+1);  // this only works with little endian, it does null terminate if len NOT % FT_CMD_SIZE
+  commandIndex += len/4;
+  if (len % FT_CMD_SIZE) { 
+    // otherwise we did a fractional write BUT it already includes the null but commandIndex is sly by 1 because of int division above
+    commandIndex++;
+  } else { 
+    // len % FT_CMD_SIZE so we to add a null termination command
+    cmd(0x00); // null terminate this str
+  }
+
+}
+
 void Eve2Display::dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val) {
   cmd(CMD_DIAL);
   cmd(((uint32_t)y << 16) | x );
@@ -289,37 +303,18 @@ void Eve2Display::gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, ui
 }
 
 void Eve2Display::text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str) {
-  uint16_t len = strlen(str);
   cmd(CMD_TEXT);
   cmd(((uint32_t)y       << 16) | x );
   cmd(((uint32_t)options << 16) | font );
-  memcpy(&commands[commandIndex],str,len+1);  // this only works with little endian, it does null terminate if len NOT % FT_CMD_SIZE
-  commandIndex += len/4;
-  if (len % FT_CMD_SIZE) { 
-    // otherwise we did a fractional write BUT it already includes the null but commandIndex is sly by 1 because of int division above
-    commandIndex++;
-  } else { 
-    // len % FT_CMD_SIZE so we to add a null termination command
-    cmd(0x00); // null terminate this str
-  }
-  
+  cmdString(str);
 }
 
 void Eve2Display::button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str) {
-  uint16_t len = strlen(str);
   cmd(CMD_BUTTON);
   cmd(((uint32_t)y << 16) | x ); // Put two 16 bit values together into one 32 bit value - do it little endian
   cmd(((uint32_t)h << 16) | w );
   cmd(((uint32_t)options << 16) | font );
-  memcpy(&commands[commandIndex],str,len+1);  // this only works with little endian, it does null terminate if len NOT % FT_CMD_SIZE
-  commandIndex += len/4;
-  if (len % FT_CMD_SIZE) { 
-    // otherwise we did a fractional write BUT it already includes the null but commandIndex is sly by 1 because of int division above
-    commandIndex++;
-  } else { 
-    // len % FT_CMD_SIZE so we to add a null termination command
-    cmd(0x00); // null terminate this str
-  }
+  cmdString(str);
 }
 
 void Eve2Display::number(uint16_t x, uint16_t y, uint16_t font, uint16_t options, uint32_t num) {
@@ -335,5 +330,46 @@ void Eve2Display::slider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_
   cmd(((uint32_t)h << 16) | w );
   cmd(((uint32_t)val << 16) | options );
   cmd((uint32_t)range );
+}
+
+
+void Eve2Display::toggle(uint16_t x, uint16_t y, uint16_t w, uint16_t font, uint16_t options, uint16_t state,const char *str) { 
+  cmd(CMD_TOGGLE);
+  cmd(((uint32_t)y << 16) | x );
+  cmd(((uint32_t)w << 16) | font );
+  cmd(((uint32_t)options << 16) | state );
+  cmdString(str);
+}
+
+void Eve2Display::progress(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range) { 
+  cmd(CMD_PROGRESS);
+  cmd(((uint32_t)y << 16) | x );
+  cmd(((uint32_t)h << 16) | w );
+  cmd(((uint32_t)val << 16) | options );
+  cmd((uint32_t)range );
+}
+
+void Eve2Display::scrollbar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range) { 
+  cmd(CMD_SCROLLBAR);
+  cmd(((uint32_t)y << 16) | x );
+  cmd(((uint32_t)h << 16) | w );
+  cmd(((uint32_t)val << 16) | options );
+  cmd((uint32_t)range );
+}
+
+void Eve2Display::keys(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str) {
+  cmd(CMD_KEYS);
+  cmd(((uint32_t)y << 16) | x ); // Put two 16 bit values together into one 32 bit value - do it little endian
+  cmd(((uint32_t)h << 16) | w );
+  cmd(((uint32_t)options << 16) | font );
+  cmdString(str);
+}
+
+void Eve2Display::clock(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t h, uint16_t m, uint16_t s, uint16_t ms) {
+  cmd(CMD_GAUGE);
+  cmd(((uint32_t)y       << 16) | x );
+  cmd(((uint32_t)options << 16) | r );
+  cmd(((uint32_t)h       << 16) | m );
+  cmd(((uint32_t)s       << 16) | ms );
 }
 

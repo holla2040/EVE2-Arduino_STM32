@@ -32,6 +32,11 @@ class Eve2Display {
     void button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str);
     void number(uint16_t x, uint16_t y, uint16_t font, uint16_t options, uint32_t num);
     void slider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range);
+    void toggle(uint16_t x, uint16_t y, uint16_t w, uint16_t font, uint16_t options, uint16_t state,const char *str);
+    void progress(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range);
+    void scrollbar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t options, uint16_t val, uint16_t range);
+    void keys(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t font, uint16_t options, const char* str);
+    void clock(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t h, uint16_t m, uint16_t s, uint16_t ms);
 
 
   private:
@@ -58,6 +63,7 @@ class Eve2Display {
     uint16_t  ramCommandOffset; // this is in bytes on 4 byte boundary
         // offset from RAM_CMD where next command is written 
         // after dlswap is sent, REG_CMD_WRITE is set to this, co-processor starts processing commands
+    void cmdString(const char *str);
 };
 
 #endif

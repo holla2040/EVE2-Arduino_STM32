@@ -26,13 +26,57 @@ void setup() {
 }
 
 void loop() {
-  slider();
+  keys();
+  //clock();
+  //scrollbar();
+  //progress();
+  //toggle();
+
+  //slider();
   //number();
   //button();
   //gauge();
 }
 
+void toggle() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
+  display.toggle(display.middle,display.width,100,20,OPT_CENTER,(i++)&0x01,"no\xffyes");
+  display.dlEnd();
+  delay(1000);
+}
+
+void keys() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
+  display.toggle(display.middle,display.width,100,20,OPT_CENTER,(i++)%5,"ABCDE");
+  display.dlEnd();
+  delay(1000);
+}
+
 void slider() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
+  display.slider(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
+  display.dlEnd();
+  i += 5;
+  delay(100);
+}
+
+void scrollbar() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(255, 255, 255));
+  display.scrollbar(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
+  display.dlEnd();
+  i += 5;
+  delay(100);
+}
+
+void progress() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
@@ -81,4 +125,21 @@ void gauge() {
   }
 
   delay(20);
+}
+
+uint8_t h,m,s;
+void clock() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.clock(display.center,display.middle,125,0,h,m,s,0);
+  display.dlEnd();
+
+  h += 1;
+  h %= 12;
+  m += 2;
+  m %= 60;
+  s += 3;
+  s %= 60;
+
+  delay(100);
 }
