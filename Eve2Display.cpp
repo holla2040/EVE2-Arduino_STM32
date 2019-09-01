@@ -373,3 +373,10 @@ void Eve2Display::clock(uint16_t x, uint16_t y, uint16_t r, uint16_t options, ui
   cmd(((uint32_t)s       << 16) | ms );
 }
 
+void Eve2Display::gradient(uint16_t x0, uint16_t y0, uint32_t rgb0, uint16_t x1, uint16_t y1, uint32_t rgb1) {
+  cmd(CMD_GRADIENT);
+  cmd(((uint32_t)y0      << 16) | x0 );
+  cmd(rgb0);
+  cmd(((uint32_t)y1      << 16) | x1 );
+  cmd(rgb1);
+}

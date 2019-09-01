@@ -26,7 +26,8 @@ void setup() {
 }
 
 void loop() {
-  keys();
+  gradient();
+  //keys();
   //clock();
   //scrollbar();
   //progress();
@@ -143,3 +144,12 @@ void clock() {
 
   delay(100);
 }
+
+void gradient() {
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.gradient(10,10,COLOR_RGB(255, 255, 0), display.width-10,display.height-10,COLOR_RGB(0, 255, 255));
+  display.dlEnd();
+  delay(1000);
+}
+
