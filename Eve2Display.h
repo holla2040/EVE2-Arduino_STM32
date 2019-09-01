@@ -20,9 +20,12 @@ class Eve2Display {
     /* debug */
     void test();
     void printRAM_DL();
-    void printRAM_CMD(uint32_t address, uint16_t length);
+    void printRAM(uint32_t address, uint16_t length);
     void printCommands();
     void log(uint8_t level, char *msg, uint32_t v);
+
+    /* memory */
+    void loadRAM(uint32_t dst, uint8_t *src, uint32_t len);
 
     /* widgets */
     void romfont(uint32_t font, uint32_t romslot);

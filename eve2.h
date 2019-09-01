@@ -100,7 +100,7 @@
 #define FT_CMD_SIZE          (4)       // 4 byte per coprocessor command of EVE
 
 // Memory block base addresses
-#define RAM_G                    0x0
+#define RAM_G                    0x000000
 #define RAM_DL                   0x300000
 #define RAM_REG                  0x302000
 #define RAM_CMD                  0x308000

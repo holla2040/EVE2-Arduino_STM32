@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include "Eve2Display.h"
 
+#include "font.h"
+
 #define console Serial1
 
 int inc = 2;
@@ -25,6 +27,7 @@ void setup() {
   display.fgcolor(0xFF0000);
   display.bgcolor(0x001100);
   display.dlEnd();
+  font();
 }
 
 void loop() {
@@ -177,4 +180,16 @@ void text() {
   display.dlEnd();
   delay(47);
 }
+
+void font() {
+  console.println(RAM_G+1000);
+  display.loadRAM(RAM_G + 1000,ibm_plex_mono_semibold_52_metric,148);
+  display.loadRAM(RAM_G + 1000 + 148,ibm_plex_mono_semibold_52_data,sizeof(ibm_plex_mono_semibold_52_data));
+  display.printRAM(RAM_G + 1000, 50);
+  
+/*
+  Ft_Gpu_Hal_WrMemFromFlash(phost, RAM_G + 1000, SAMApp_ShowCustomFont_MetricBlock, 148);
+  Ft_Gpu_Hal_WrMemFromFlash(phost, RAM_G + 1000 + 148, SAMApp_ShowCustomFont_FontBmpData, 36432);
+*/
+};
 

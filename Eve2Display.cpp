@@ -247,9 +247,9 @@ void Eve2Display::printCommands() {
   console.println();
 }
 
-void Eve2Display::printRAM_CMD(uint32_t address, uint16_t length) {
+void Eve2Display::printRAM(uint32_t address, uint16_t length) {
   char temp[100];
-  console.println("\nRAM_CMD");
+  console.println("\nRAM");
   console.println("-----------------------");
   for (uint32_t i = 0;i < length;i++) {
   sprintf(temp,"0x%08X 0x%08X",address+i*FT_CMD_SIZE,rd32(address + i*FT_CMD_SIZE));
@@ -395,4 +395,15 @@ void Eve2Display::spinner(uint16_t x, uint16_t y, uint16_t style, uint16_t scale
   cmd(CMD_SPINNER);
   cmd(((uint32_t)y       << 16) | x);
   cmd(((uint32_t)scale   << 16) | style);
+}
+
+void Eve2Display::loadRAM(uint32_t dst, uint8_t *src, uint32_t len) {
+  console.println(dst);
+  uint8_t *a = (uint8_t*)&dst;
+  spiEnable();
+  SPI.write(a[2]);  
+  SPI.write(a[1]);     
+  SPI.write(a[0]);              
+  SPI.write(src,len);
+  spiDisable();
 }
