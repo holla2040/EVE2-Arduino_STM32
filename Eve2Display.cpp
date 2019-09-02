@@ -426,3 +426,9 @@ void Eve2Display::setfont(uint32_t font, uint32_t ptr) {
   cmd(ptr);
 }
 
+void Eve2Display::setfont2(uint32_t font, uint32_t ptr,uint32_t firstchar) {
+  cmd(CMD_SETFONT);
+  cmd(font);
+  cmd(ptr);
+  cmd(firstchar);
+}

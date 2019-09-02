@@ -31,10 +31,11 @@ void setup() {
 }
 
 void loop() {
+  fontCustom();
   //spinner();
   //gradient();
   //keys();
-  clock();
+  //clock();
   //scrollbar();
   //progress();
   //toggle();
@@ -177,16 +178,25 @@ void text() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.text(display.center,display.middle,30,OPT_CENTER,line);
-  delay(47);
+  delay(50);
 }
 
 void fontLoad() {
-  console.println(RAM_G+1000);
   display.loadRAM(RAM_G + 1000,ibm_plex_mono_semibold_52_metric,148);
   display.loadRAM(RAM_G + 1000 + 148,ibm_plex_mono_semibold_52_data,sizeof(ibm_plex_mono_semibold_52_data));
   display.dlStart();
   display.setbitmap(RAM_G + 1000,L1,32,55);
-  display.setfont(1,RAM_G + 1000);
+  display.setfont2(10,RAM_G + 1000,'+');
   display.dlEnd();
-};
+}
+
+void fontCustom() {
+  //sprintf(line,"%.3f",millis()/10009.0);
+  //console.println(line);
+  display.dlStart();
+  display.cmd(CLEAR(1,1,1));
+  display.text(50,50,10,0,"0");
+  display.dlEnd();
+  delay(50);
+}
 
