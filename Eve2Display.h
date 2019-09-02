@@ -26,6 +26,8 @@ class Eve2Display {
 
     /* memory */
     void loadRAM(uint32_t dst, uint8_t *src, uint32_t len);
+    void setbitmap(uint32_t addr, uint16_t fmt, uint16_t width, uint16_t height);
+    void setfont(uint32_t font, uint32_t ptr);
 
     /* widgets */
     void romfont(uint32_t font, uint32_t romslot);
@@ -45,6 +47,7 @@ class Eve2Display {
     void gradient(uint16_t x0, uint16_t y0, uint32_t rgb0, uint16_t x1, uint16_t y1, uint32_t rgb1);
     void spinner(uint16_t x, uint16_t y, uint16_t style, uint16_t scale);
 
+
   private:
     int pinCS;
     int pinPDN;
@@ -55,13 +58,15 @@ class Eve2Display {
 
     uint8_t logLevel;
 
-    uint8_t rd8(uint32_t address);
-    uint16_t rd16(uint32_t address);
-    uint32_t rd32(uint32_t address);
+    void cmdString(const char *str);
+    uint8_t displayListInProgress;
 
     void wr8(uint32_t address, uint8_t parameter);
     void wr16(uint32_t address, uint16_t parameter);
     void wr32(uint32_t address, uint32_t parameter);
+    uint8_t rd8(uint32_t address);
+    uint16_t rd16(uint32_t address);
+    uint32_t rd32(uint32_t address);
     void spiEnable();
     void spiDisable();
     uint32_t  commands[4096/8]; // buffer for commands
@@ -69,7 +74,6 @@ class Eve2Display {
     uint16_t  ramCommandOffset; // this is in bytes on 4 byte boundary
         // offset from RAM_CMD where next command is written 
         // after dlswap is sent, REG_CMD_WRITE is set to this, co-processor starts processing commands
-    void cmdString(const char *str);
 };
 
 #endif

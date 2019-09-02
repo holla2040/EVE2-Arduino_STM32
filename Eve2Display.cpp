@@ -79,6 +79,8 @@ void Eve2Display::begin() {
   width =  HSIZE;
   center = HSIZE/2;
   middle = VSIZE/2;
+
+  displayListInProgress = 0;
 }
 
 void Eve2Display::hostCommand(uint8_t command) {
@@ -171,6 +173,7 @@ void Eve2Display::spiDisable() {
 void Eve2Display::dlStart() {
   commandIndex = 0;
   cmd(CMD_DLSTART);
+  displayListInProgress = 1;
 }
 
 void Eve2Display::cmd(uint32_t command) {
@@ -211,6 +214,8 @@ void Eve2Display::dlEnd() {
   SPI.write(&ramCommandOffset,FT_CMD_SIZE);
   spiDisable();
   // printRAM_CMD(RAM_CMD,40);
+
+  displayListInProgress = 0;
 }
 
 /* -- debug ------------------------------------------------------ */
@@ -397,13 +402,27 @@ void Eve2Display::spinner(uint16_t x, uint16_t y, uint16_t style, uint16_t scale
   cmd(((uint32_t)scale   << 16) | style);
 }
 
-void Eve2Display::loadRAM(uint32_t dst, uint8_t *src, uint32_t len) {
-  console.println(dst);
+void Eve2Display::loadRAM(uint32_t dst, uint8_t* src, uint32_t len) {
   uint8_t *a = (uint8_t*)&dst;
+
   spiEnable();
-  SPI.write(a[2]);  
+  SPI.write(a[2]&0x3F | 0x80);  
   SPI.write(a[1]);     
   SPI.write(a[0]);              
   SPI.write(src,len);
   spiDisable();
 }
+
+void Eve2Display::setbitmap(uint32_t addr, uint16_t fmt, uint16_t width, uint16_t height) {
+  cmd(CMD_SETBITMAP);
+  cmd(addr);
+  cmd(((uint32_t)width   << 16) | fmt);
+  cmd((uint32_t)height);
+}
+
+void Eve2Display::setfont(uint32_t font, uint32_t ptr) {
+  cmd(CMD_SETFONT);
+  cmd(font);
+  cmd(ptr);
+}
+

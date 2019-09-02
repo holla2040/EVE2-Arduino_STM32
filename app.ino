@@ -27,7 +27,7 @@ void setup() {
   display.fgcolor(0xFF0000);
   display.bgcolor(0x001100);
   display.dlEnd();
-  font();
+  fontLoad();
 }
 
 void loop() {
@@ -177,19 +177,16 @@ void text() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.text(display.center,display.middle,30,OPT_CENTER,line);
-  display.dlEnd();
   delay(47);
 }
 
-void font() {
+void fontLoad() {
   console.println(RAM_G+1000);
   display.loadRAM(RAM_G + 1000,ibm_plex_mono_semibold_52_metric,148);
   display.loadRAM(RAM_G + 1000 + 148,ibm_plex_mono_semibold_52_data,sizeof(ibm_plex_mono_semibold_52_data));
-  display.printRAM(RAM_G + 1000, 50);
-  
-/*
-  Ft_Gpu_Hal_WrMemFromFlash(phost, RAM_G + 1000, SAMApp_ShowCustomFont_MetricBlock, 148);
-  Ft_Gpu_Hal_WrMemFromFlash(phost, RAM_G + 1000 + 148, SAMApp_ShowCustomFont_FontBmpData, 36432);
-*/
+  display.dlStart();
+  display.setbitmap(RAM_G + 1000,L1,32,55);
+  display.setfont(1,RAM_G + 1000);
+  display.dlEnd();
 };
 
