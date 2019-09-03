@@ -252,13 +252,14 @@ void Eve2Display::printCommands() {
   console.println();
 }
 
-void Eve2Display::printRAM(uint32_t address, uint16_t length) {
-  char temp[100];
-  console.println("\nRAM");
+void Eve2Display::printRAM(uint32_t address, uint32_t length) {
+  char line[100];
+  sprintf(line,"\nRAM 0x%08X %d",address,length); 
+  console.println(line);
   console.println("-----------------------");
   for (uint32_t i = 0;i < length;i++) {
-  sprintf(temp,"0x%08X 0x%08X",address+i*FT_CMD_SIZE,rd32(address + i*FT_CMD_SIZE));
-    console.println(temp);
+    sprintf(line,"0x%08X 0x%08X",address+i*FT_CMD_SIZE,rd32(address + i*FT_CMD_SIZE));
+    console.println(line);
   }
   console.println();
 }
@@ -416,8 +417,8 @@ void Eve2Display::loadRAM(uint32_t dst, uint8_t* src, uint32_t len) {
 void Eve2Display::setbitmap(uint32_t addr, uint16_t fmt, uint16_t width, uint16_t height) {
   cmd(CMD_SETBITMAP);
   cmd(addr);
-  cmd(((uint32_t)width   << 16) | fmt);
-  cmd((uint32_t)height);
+  cmd(((uint32_t)fmt   << 16) | width);
+  cmd((uint32_t)height << 16);
 }
 
 void Eve2Display::setfont(uint32_t font, uint32_t ptr) {

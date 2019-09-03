@@ -104,6 +104,9 @@
 #define RAM_DL                   0x300000
 #define RAM_REG                  0x302000
 #define RAM_CMD                  0x308000
+#define ROM_FONT                 0x1E0000
+#define ROM_FONT_ADDR            0x2FFFFC
+
 
 // Graphics Engine Registers - FT81x Series Programmers Guide Section 3.1
 // Addresses defined as offsets from the base address called RAM_REG and located at 0x302000

@@ -2,7 +2,10 @@
 #include <stdint.h>
 #include "Eve2Display.h"
 
+PROGMEM uint8_t font[] = 
 #include "font.h"
+;
+
 
 #define console Serial1
 
@@ -20,7 +23,9 @@ void setup() {
   display.begin();
 
   display.dlStart();
+/*
   display.romfont(1,31);
+*/
   display.romfont(2,32);
   display.romfont(3,33);
   display.romfont(4,34);
@@ -28,14 +33,15 @@ void setup() {
   display.bgcolor(0x001100);
   display.dlEnd();
   fontLoad();
+  fontCustom();
 }
 
 void loop() {
-  fontCustom();
+  //fontCustom();
   //spinner();
   //gradient();
   //keys();
-  //clock();
+  clock();
   //scrollbar();
   //progress();
   //toggle();
@@ -182,20 +188,31 @@ void text() {
 }
 
 void fontLoad() {
-  display.loadRAM(RAM_G + 1000,ibm_plex_mono_semibold_52_metric,148);
-  display.loadRAM(RAM_G + 1000 + 148,ibm_plex_mono_semibold_52_data,sizeof(ibm_plex_mono_semibold_52_data));
+  // display.printRAM(ROM_FONT_ADDR,1);
+  // display.printRAM(ROM_FONT,1152000/4);
+
+  display.loadRAM(RAM_G + 1000,font,sizeof(font));
+  display.printRAM(RAM_G + 1000,50);
+
+
   display.dlStart();
-  display.setbitmap(RAM_G + 1000,L1,32,55);
-  display.setfont2(10,RAM_G + 1000,'+');
+  display.setbitmap(RAM_G + 1000,L1,10,14);
+  display.setfont(1,RAM_G + 1000);
   display.dlEnd();
+
 }
+/*
+  display.setbitmap(0x00201EE0,1,8,8);
+  //display.setfont2(1,0x00201EE0,20);
+  display.setfont(1,0x00201EE0);
+*/
 
 void fontCustom() {
   //sprintf(line,"%.3f",millis()/10009.0);
   //console.println(line);
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.text(50,50,10,0,"0");
+  display.text(50,50,1,0,"A");
   display.dlEnd();
   delay(50);
 }
