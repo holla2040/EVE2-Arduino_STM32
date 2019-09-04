@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include "Eve2Display.h"
 
+#define print console.println
+
 PROGMEM uint8_t font[] = 
 #include "font.h"
 ;
@@ -41,7 +43,7 @@ void loop() {
   //spinner();
   //gradient();
   //keys();
-  clock();
+  //clock();
   //scrollbar();
   //progress();
   //toggle();
@@ -188,31 +190,24 @@ void text() {
 }
 
 void fontLoad() {
-  // display.printRAM(ROM_FONT_ADDR,1);
-  // display.printRAM(ROM_FONT,1152000/4);
-
   display.loadRAM(RAM_G + 1000,font,sizeof(font));
-  display.printRAM(RAM_G + 1000,50);
-
 
   display.dlStart();
-  display.setbitmap(RAM_G + 1000,L1,10,14);
-  display.setfont(1,RAM_G + 1000);
+  display.cmd(CLEAR_COLOR_RGB(0,0,0));
+  display.cmd(CLEAR(1,1,1));
+  display.bitmaphandle(14);
+  display.bitmapsource(-1252);
+  display.bitmaplayout(L1,3,25);
+  display.bitmapsize(NEAREST,BORDER,BORDER,18,25);
+  display.setfont(14,RAM_G + 1000);
   display.dlEnd();
-
 }
-/*
-  display.setbitmap(0x00201EE0,1,8,8);
-  //display.setfont2(1,0x00201EE0,20);
-  display.setfont(1,0x00201EE0);
-*/
 
 void fontCustom() {
-  //sprintf(line,"%.3f",millis()/10009.0);
-  //console.println(line);
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.text(50,50,1,0,"A");
+  display.cmd(COLOR_RGB(255,255,255)); 
+  display.text(50,50,14,0,"helloworld");
   display.dlEnd();
   delay(50);
 }

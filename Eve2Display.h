@@ -29,6 +29,10 @@ class Eve2Display {
     void setbitmap(uint32_t addr, uint16_t fmt, uint16_t width, uint16_t height);
     void setfont(uint32_t font, uint32_t ptr);
     void setfont2(uint32_t font, uint32_t ptr,uint32_t firstchar);
+    void bitmaphandle(uint8_t handle);
+    void bitmapsource(uint32_t addr);
+    void bitmaplayout(uint8_t format, uint16_t stride, uint16_t height);
+    void bitmapsize(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height);
 
     /* widgets */
     void romfont(uint32_t font, uint32_t romslot);

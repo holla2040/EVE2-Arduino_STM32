@@ -433,3 +433,20 @@ void Eve2Display::setfont2(uint32_t font, uint32_t ptr,uint32_t firstchar) {
   cmd(ptr);
   cmd(firstchar);
 }
+
+void Eve2Display::bitmaphandle(uint8_t handle) {
+  cmd(0x05<<24 | handle&0x1F); // 4.6
+}
+
+void Eve2Display::bitmapsource(uint32_t addr) {
+  cmd(0x01<<24 | addr&0x003FFFFF); // 4.11 
+}
+
+void Eve2Display::bitmaplayout(uint8_t format, uint16_t stride, uint16_t height) {
+    cmd(0x07<<24 | (format&0x1F)<<19 | (stride&0x1FF)<<9 | (height&0x1FF)); // 4.7
+}
+
+void Eve2Display::bitmapsize(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height) {
+  //cmd(BITMAP_SIZE(filter,wrapx,wrapy,width,height));
+  cmd(0x08<<24 | (filter&0x01)<<20 | (wrapx&0x01)<<19 | (wrapy&0x1)<<18 | (width&0x1FF)<<9 | (height&0x1FF)); // 4.9
+}
