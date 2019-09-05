@@ -1,4 +1,4 @@
-/*Command Line: fnt_cvt.exe -f legacy -i C:/users/holla/My Documents/assets/ibm-plex-mono.semibold.ttf -s 80 -d  1000 -c setfont -l 48 -t C:/users/holla/My Documents/assets/numbers.txt -o C:/users/holla/My Documents/assets/output*/ 
+/*Command Line: fnt_cvt.exe -f legacy -i C:/users/holla/My Documents/assets/ibm-plex-mono.semibold.ttf -s 80 -d  1000 -c setfont2 -l 32 -t C:/users/holla/My Documents/assets/numbers.txt -o C:/users/holla/My Documents/assets/output*/ 
 
 /*26 characters have been converted */
 
@@ -15,8 +15,8 @@
 48,0,0,0,
 /* Max Height */
 94,0,0,0,
-/* Raw Data Address in Decimal: <-16900> */ 
-252,189,255,255,
+/* Raw Data Address in Decimal: <1148> */ 
+124,4,0,0,
 
 /* 148 Metric Block End ---  */
 
