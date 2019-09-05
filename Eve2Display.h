@@ -52,6 +52,9 @@ class Eve2Display {
     void gradient(uint16_t x0, uint16_t y0, uint32_t rgb0, uint16_t x1, uint16_t y1, uint32_t rgb1);
     void spinner(uint16_t x, uint16_t y, uint16_t style, uint16_t scale);
 
+    void tag(uint8_t i);
+    uint8_t touched();
+
 
   private:
     int pinCS;

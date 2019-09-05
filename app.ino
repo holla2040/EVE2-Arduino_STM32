@@ -31,12 +31,12 @@ void setup() {
   display.fgcolor(0xFF0000);
   display.bgcolor(0x001100);
   display.dlEnd();
-  fontLoad();
-  //fontCustom();
+  //fontSetup();
+  buttonSetup();
 }
 
 void loop() {
-  fontCustom();
+  //fontCustom();
   //spinner();
   //gradient();
   //keys();
@@ -47,7 +47,7 @@ void loop() {
 
   //slider();
   //number();
-  //button();
+  buttonLoop();
   //gauge();
   //text();
 }
@@ -119,13 +119,35 @@ void number() {
   delay(100);
 }
 
-void button() {
+void buttonSetup() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
-  display.button(display.center,display.middle,150,50,31,OPT_CENTER,"button");
+
+  display.tag(1);
+  display.button(10,10,100,50,31,OPT_CENTER,"1");
+  display.tag(2);
+  display.button(10,70,100,50,31,OPT_CENTER,"2");
+  display.tag(3);
+  display.button(10,130,100,50,31,OPT_CENTER,"3");
+  display.tag(4);
+  display.button(10,190,100,50,31,OPT_CENTER,"4");
+
   display.dlEnd();
   delay(1000);
+}
+
+uint32_t touchTimeout;
+void buttonLoop() {
+  uint32_t now = millis();
+  if (now > touchTimeout) {
+    uint8_t t = display.touched();
+    if (t) {
+      sprintf(line,"%-6d touch %d",now);
+      console.println(line);
+    }
+    touchTimeout = now + 200;
+  }
 }
 
 void gauge() {
@@ -186,16 +208,24 @@ void text() {
   delay(50);
 }
 
-void fontLoad() {
+void fontSetup() {
   display.loadRAM(RAM_G + 1000,font,sizeof(font));
 
   display.dlStart();
   display.cmd(CLEAR_COLOR_RGB(0,0,0));
   display.cmd(CLEAR(1,1,1));
   display.bitmaphandle(14);
+
+// 40 pt
+  display.bitmapsource(1000+148 - (32*3*47)); // see AN_014
+  display.bitmaplayout(L1,3,47);
+  display.bitmapsize(NEAREST,BORDER,BORDER,24,47);
+
+/* 80
   display.bitmapsource(1000+148 - (32*6*94)); // see AN_014
   display.bitmaplayout(L1,6,94);
   display.bitmapsize(NEAREST,BORDER,BORDER,48,94);
+*/
 
 /* an_014 
   display.bitmapsource(-1252);
@@ -210,7 +240,16 @@ void fontLoad() {
 }
 
 void fontCustom() {
-  char l[20];
+  display.dlStart();
+  display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(0,0,0));
+  display.text(0,0,14,0,"+123.456");
+  display.dlEnd();
+  delay(100); 
+}
+
+void dro() {
   float y;
   float t = millis()/10000.0;
   display.dlStart();

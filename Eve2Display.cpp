@@ -451,4 +451,11 @@ void Eve2Display::bitmapsize(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint1
   cmd(0x08<<24 | (filter&0x01)<<20 | (wrapx&0x01)<<19 | (wrapy&0x1)<<18 | (width&0x1FF)<<9 | (height&0x1FF)); // 4.9
 }
 
+void Eve2Display::tag(uint8_t i) {
+  cmd(0x03<<24 | i&0xFF); // 4.45
+}
+
+uint8_t Eve2Display::touched() {
+  return rd8(RAM_REG + REG_TOUCH_TAG);
+}
 

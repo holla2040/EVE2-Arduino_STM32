@@ -1,4 +1,4 @@
-/*Command Line: fnt_cvt.exe -f legacy -i C:/users/holla/My Documents/assets/ibm-plex-mono.semibold.ttf -s 80 -d  1000 -c setfont2 -l 32 -t C:/users/holla/My Documents/assets/numbers.txt -o C:/users/holla/My Documents/assets/output*/ 
+/*Command Line: fnt_cvt.exe -f legacy -i Z:/home/holla/r/d/display/eve2/src/EVE2-Arduino_STM32/assets/ibm-plex-mono.semibold.ttf -s 80 -d 10000 -c setfont -l 32 -t Z:/home/holla/r/d/display/eve2/src/EVE2-Arduino_STM32/assets/numbers.txt -o Z:/home/holla/r/d/display/eve2/src/EVE2-Arduino_STM32/assets/output*/ 
 
 /*26 characters have been converted */
 
@@ -15,8 +15,8 @@
 48,0,0,0,
 /* Max Height */
 94,0,0,0,
-/* Raw Data Address in Decimal: <1148> */ 
-124,4,0,0,
+/* Raw Data Address in Decimal: <-7900> */ 
+36,225,255,255,
 
 /* 148 Metric Block End ---  */
 
