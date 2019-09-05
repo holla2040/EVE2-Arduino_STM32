@@ -203,7 +203,6 @@ void fontLoad() {
   display.bitmapsize(NEAREST,BORDER,BORDER,18,25);
 */
   display.setfont(14,RAM_G + 1000);
-  //display.setfont2(14,RAM_G + 1000,48);
   display.dlEnd();
 }
 
@@ -211,10 +210,9 @@ void fontCustom() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255,255,255)); 
-  // sprintf(line,"%d",millis());
-  // display.text(10,10,14,0,line);
-  display.number(10,10,14,0,millis());
+  display.text(10,10,14,0,"123.456");
+  display.number(10,100,14,0,millis());
   display.dlEnd();
-  delay(50);
+  delay(101);
 }
 
