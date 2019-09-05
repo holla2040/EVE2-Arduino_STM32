@@ -33,11 +33,11 @@ void setup() {
   display.bgcolor(0x001100);
   display.dlEnd();
   fontLoad();
-  fontCustom();
+  //fontCustom();
 }
 
 void loop() {
-  //fontCustom();
+  fontCustom();
   //spinner();
   //gradient();
   //keys();
@@ -189,7 +189,6 @@ void text() {
 
 void fontLoad() {
   display.loadRAM(RAM_G + 1000,font,sizeof(font));
-print(sizeof(font));
 
   display.dlStart();
   display.cmd(CLEAR_COLOR_RGB(0,0,0));
@@ -212,7 +211,9 @@ void fontCustom() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255,255,255)); 
-  display.text(50,50,14,0,"+123.456");
+  // sprintf(line,"%d",millis());
+  // display.text(10,10,14,0,line);
+  display.number(10,10,14,0,millis());
   display.dlEnd();
   delay(50);
 }
