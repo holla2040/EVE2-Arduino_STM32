@@ -215,42 +215,50 @@ void fontCustom() {
   char l[20];
   float y;
   float t = millis()/10000.0;
+uint32_t s = micros();
   display.dlStart();
   display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(0,0,0));
+  display.text(0,0,29,0,"X");
+  display.text(0,84,29,0,"Y");
+  display.text(0,169,29,0,"Z");
 
-  y = 1000*sin(t);
-  if (y > 800.0) {
+  // X
+  y = 999*sin(t);
+  if (abs(y) > 800.0) {
     display.cmd(COLOR_RGB(255,0,0));
   } else {
     display.cmd(COLOR_RGB(0,0,0));
   }
   sprintf(line,"%04.03f",y);
   display.text(370,-15,4,OPT_RIGHTX,line);
-  display.text(0,0,25,0,"X");
 
-  y = 1000*sin(3 + t);
-  if (y > 800.0) {
+  // Y
+  y = 999*sin(3 + t);
+  if (abs(y) > 800.0) {
     display.cmd(COLOR_RGB(255,0,0));
   } else {
     display.cmd(COLOR_RGB(0,0,0));
   }
-  sprintf(line,"%04.03f",1000*sin(3 + t));
+  sprintf(line,"%04.03f",y);
   display.text(370,70,4,OPT_RIGHTX,line);
-  display.text(0,82,25,0,"Y");
 
-  y = 1000*sin(4 + t);
-  if (y > 800.0) {
+  // Z 
+  y = 999*sin(4 + millis()/10000000.0);
+  sprintf(line,"%04.03f",y);
+  display.cmd(COLOR_RGB(200,200,200));
+  display.text(373,158,4,OPT_RIGHTX,line);
+
+  if (abs(y) > 800.0) {
     display.cmd(COLOR_RGB(255,0,0));
   } else {
     display.cmd(COLOR_RGB(0,0,0));
   }
-  sprintf(line,"%04.03f",1000*sin(4 + t));
   display.text(370,155,4,OPT_RIGHTX,line);
-  display.text(0,170,25,0,"Z");
 
   display.dlEnd();
-  delay(101);
+  print(micros() - s);
+  delay(33);
 }
 
