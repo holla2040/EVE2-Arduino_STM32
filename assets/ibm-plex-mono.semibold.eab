@@ -1,0 +1,77 @@
+{
+    "general_info": {
+        "main_tab_index": 3,
+        "signature": "0x5599AAFF"
+    },
+    "tab_info": [
+        {
+            "astc_options": "",
+            "astc_preset": "thorough",
+            "compress": false,
+            "eve_chip": "BT81X",
+            "image_format": "ARGB1555",
+            "input_list": [
+            ],
+            "output_folder": "Y:/r/d/display/eve2/assetbuilder/fonts/fonts"
+        },
+        {
+            "input_file": "",
+            "out_audio_sample_rate": "Keep sample rate of source file",
+            "out_video_codec": "mjpeg",
+            "out_video_height": 0,
+            "out_video_width": 0,
+            "output_folder": "Y:/r/d/display/eve2/assetbuilder/fonts/fonts"
+        },
+        {
+            "input_file": "",
+            "out_audio_format": "8 Bit Signed PCM",
+            "out_audio_sample_rate": "Keep sample rate of source file",
+            "output_folder": "Y:/r/d/display/eve2/assetbuilder/fonts/fonts"
+        },
+        {
+            "animation_frame_rate": 30,
+            "animation_tile_size": "auto",
+            "astc_block": "4x4",
+            "astc_preset": "thorough",
+            "input_file": "",
+            "output_folder": "Y:/r/d/display/eve2/assetbuilder/fonts/fonts"
+        },
+        {
+            "astc_block": "auto",
+            "astc_preset": "thorough",
+            "ext_bitmap_format": "L1",
+            "ext_charset_checked": true,
+            "ext_charset_file": "Z:/home/holla/r/d/display/eve2/assetbuilder/fonts/numbers.txt",
+            "ext_charset_optimize": "UFT-8",
+            "ext_data_address": 4096,
+            "ext_data_locate": "RAM_G",
+            "first_character": 48,
+            "font_eve_address": 1000,
+            "font_eve_command": "SETFONT",
+            "font_kerning": false,
+            "font_size": 80,
+            "font_tab_index": 0,
+            "input_file": "C:/users/holla/My Documents/assets/ibm-plex-mono.semibold.ttf",
+            "legacy_charset_address_first": 61472,
+            "legacy_charset_address_last": 61598,
+            "legacy_charset_checked": true,
+            "legacy_charset_file": "C:/users/holla/My Documents/assets/numbers.txt",
+            "legacy_charset_type": "ASCII",
+            "output_folder": "C:/users/holla/My Documents/assets/output"
+        },
+        {
+            "blob_check": true,
+            "blob_path": "",
+            "flash_program_bin": "",
+            "flash_program_blob": "",
+            "flash_program_module": "FT4222",
+            "flash_read_file": "",
+            "flash_read_folder": "",
+            "genflash_tab_index": 0,
+            "input_list": [
+            ],
+            "output_folder": "Y:/r/d/display/eve2/assetbuilder/fonts/fonts",
+            "output_name": ""
+        }
+    ]
+}

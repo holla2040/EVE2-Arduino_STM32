@@ -1,3 +1,0 @@
-wine ~/bin/fnt_cvt.exe -i ibm-plex-mono.semibold.ttf -s 52 -a -d 1000
-wine ~/bin/fnt_cvt.exe -i ibm-plex-mono.semibold.ttf -s 52 -d 1000 numbers.txt 
-
