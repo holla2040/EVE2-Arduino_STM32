@@ -25,9 +25,7 @@ void setup() {
   display.begin();
 
   display.dlStart();
-/*
   display.romfont(1,31);
-*/
   display.romfont(2,32);
   display.romfont(3,33);
   display.romfont(4,34);
@@ -191,15 +189,22 @@ void text() {
 
 void fontLoad() {
   display.loadRAM(RAM_G + 1000,font,sizeof(font));
+print(sizeof(font));
 
   display.dlStart();
   display.cmd(CLEAR_COLOR_RGB(0,0,0));
   display.cmd(CLEAR(1,1,1));
   display.bitmaphandle(14);
+  display.bitmapsource(-16900);
+  display.bitmaplayout(L1,6,94);
+  display.bitmapsize(NEAREST,BORDER,BORDER,48,94);
+/* an_014 
   display.bitmapsource(-1252);
   display.bitmaplayout(L1,3,25);
   display.bitmapsize(NEAREST,BORDER,BORDER,18,25);
+*/
   display.setfont(14,RAM_G + 1000);
+  //display.setfont2(14,RAM_G + 1000,48);
   display.dlEnd();
 }
 
@@ -207,7 +212,7 @@ void fontCustom() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255,255,255)); 
-  display.text(50,50,14,0,"helloworld");
+  display.text(50,50,14,0,"+123.456");
   display.dlEnd();
   delay(50);
 }
