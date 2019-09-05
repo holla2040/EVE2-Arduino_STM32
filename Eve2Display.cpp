@@ -439,6 +439,7 @@ void Eve2Display::bitmaphandle(uint8_t handle) {
 }
 
 void Eve2Display::bitmapsource(uint32_t addr) {
+console.println(addr,HEX);
   cmd(0x01<<24 | addr&0x003FFFFF); // 4.11 
 }
 

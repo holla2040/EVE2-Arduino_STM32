@@ -189,29 +189,33 @@ void text() {
 
 void fontLoad() {
   display.loadRAM(RAM_G + 1000,font,sizeof(font));
+  print(sizeof(font));
 
   display.dlStart();
   display.cmd(CLEAR_COLOR_RGB(0,0,0));
   display.cmd(CLEAR(1,1,1));
   display.bitmaphandle(14);
-  display.bitmapsource(-16900);
+  display.bitmapsource(1000+148 - (32*6*94)); // see AN_014
   display.bitmaplayout(L1,6,94);
   display.bitmapsize(NEAREST,BORDER,BORDER,48,94);
+
 /* an_014 
   display.bitmapsource(-1252);
   display.bitmaplayout(L1,3,25);
   display.bitmapsize(NEAREST,BORDER,BORDER,18,25);
 */
+
   display.setfont(14,RAM_G + 1000);
   display.dlEnd();
 }
 
 void fontCustom() {
   display.dlStart();
+  display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255,255,255)); 
+  display.cmd(COLOR_RGB(0,0,0));
   display.text(10,10,14,0,"123.456");
-  display.number(10,100,14,0,millis());
+//  display.number(10,100,14,0,millis());
   display.dlEnd();
   delay(101);
 }
