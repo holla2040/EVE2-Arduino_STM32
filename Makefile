@@ -17,13 +17,11 @@ githead = $(shell git rev-parse --short HEAD)
 
 bin:
 	@ mkdir -p /tmp/arduino_build /tmp/arduino_cache
-	# @ /home/holla/arduino/arduino-builder -logger=machine -hardware /home/holla/arduino/hardware -hardware /home/holla/.arduino15/packages -hardware /home/holla/Arduino/hardware -tools /home/holla/arduino/tools-builder -tools /home/holla/arduino/hardware/tools/avr -tools /home/holla/.arduino15/packages -built-in-libraries /home/holla/arduino/libraries -libraries /home/holla/Arduino/libraries -fqbn=Arduino_STM32:STM32F1:genericSTM32F103C:device_variant=STM32F103C8,upload_method=STLinkMethod,cpu_speed=speed_72mhz,opt=osstd -ide-version=10808 -build-path /tmp/arduino_build -warnings=none -build-cache /tmp/arduino_cache -prefs=build.warn_data_percentage=75 $(extra) $(ino)
-	@ /home/holla/arduino/arduino-builder -compile -logger=machine -hardware /home/holla/arduino/hardware -hardware /home/holla/.arduino15/packages -hardware /home/holla/Arduino/hardware -tools /home/holla/arduino/tools-builder -tools /home/holla/arduino/hardware/tools/avr -tools /home/holla/.arduino15/packages -built-in-libraries /home/holla/arduino/libraries -libraries /home/holla/Arduino/libraries -fqbn=Arduino_STM32:STM32F1:genericSTM32F103C:device_variant=STM32F103C8,upload_method=STLinkMethod,cpu_speed=speed_72mhz,opt=osstd -ide-version=10808 -build-path /tmp/arduino_build -warnings=none -build-cache /tmp/arduino_cache -prefs=build.warn_data_percentage=75 $(extra) -jobs 4 -prefs compiler.cpp.extra_flags=-DGITHEAD=\"$(githead)\" $(ino)
+	@ ~/arduino/arduino-builder -compile -logger=machine -hardware ~/arduino/hardware -hardware ~/.arduino15/packages -hardware ~/Arduino/hardware -tools ~/arduino/tools-builder -tools ~/arduino/hardware/tools/avr -tools ~/.arduino15/packages -built-in-libraries ~/arduino/libraries -libraries ~/Arduino/libraries -fqbn=Arduino_STM32:STM32F1:genericSTM32F103C:device_variant=STM32F103C8,upload_method=STLinkMethod,cpu_speed=speed_72mhz,opt=osstd -ide-version=10808 -build-path /tmp/arduino_build -warnings=none -build-cache /tmp/arduino_cache -prefs=build.warn_data_percentage=75 $(extra) -jobs 4 -prefs compiler.cpp.extra_flags=-DGITHEAD=\"$(githead)\" $(ino)
 	@ls -sh /tmp/arduino_build/$(ino).bin
 
-
 usb: 
-	/home/holla/Arduino/hardware/Arduino_STM32/tools/linux/maple_upload ttyACM0 2 1EAF:0003 /tmp/arduino_build/$(ino).bin 
+	~/Arduino/hardware/Arduino_STM32/tools/linux/maple_upload ttyACM0 2 1EAF:0003 /tmp/arduino_build/$(ino).bin 
 
 flashlocal:
 	~/bin/st-flash write /tmp/arduino_build/$(ino).bin  0x8000000
@@ -33,35 +31,6 @@ flashremote:
 	@ scp /tmp/arduino_build/$(ino).bin $(remoteip):/tmp
 	@ ssh $(remoteip) st-flash write /tmp/$(ino).bin  0x8000000
 
-flashremoteboth: 
-	@ echo "flashremote"
-	@ echo "scp /tmp/arduino_build/"$(ino)".bin to "$(remoteip)"/tmp"
-	@ scp /tmp/arduino_build/$(ino).bin $(remoteip):/tmp
-	@ echo 'st-flash --serial $(stlink8)  write /tmp/$(ino).bin  0x8000000'
-	@ echo 'st-flash --serial $(stlink12) write /tmp/$(ino).bin  0x8000000'
-	@ ssh $(remoteip) 'st-flash --serial $(stlink8) write /tmp/$(ino).bin  0x8000000;st-flash --serial $(stlink12) write /tmp/$(ino).bin  0x8000000'
-
-flash8: 
-	@ echo "flashremote"
-	@ echo "scp /tmp/arduino_build/"$(ino)".bin to "$(remoteip)"/tmp"
-	@ scp /tmp/arduino_build/$(ino).bin $(remoteip):/tmp
-	@ echo 'st-flash --serial $(stlink8)  write /tmp/$(ino).bin  0x8000000'
-	@ ssh $(remoteip) 'st-flash --serial $(stlink8) write /tmp/$(ino).bin  0x8000000'
-
-flash12: 
-	@ echo "flashremote"
-	@ echo "scp /tmp/arduino_build/"$(ino)".bin to "$(remoteip)"/tmp"
-	@ scp /tmp/arduino_build/$(ino).bin $(remoteip):/tmp
-	@ echo 'st-flash --serial $(stlink12)  write /tmp/$(ino).bin  0x8000000'
-	@ ssh $(remoteip) 'st-flash --serial $(stlink12) write /tmp/$(ino).bin  0x8000000'
-
-flashspare: 
-	@ echo "flashremote"
-	@ echo "scp /tmp/arduino_build/"$(ino)".bin to "$(remoteip)"/tmp"
-	@ scp /tmp/arduino_build/$(ino).bin $(remoteip):/tmp
-	@ echo 'st-flash --serial $(stlinkspare)  write /tmp/$(ino).bin  0x8000000'
-	@ ssh $(remoteip) 'st-flash --serial $(stlinkspare) write /tmp/$(ino).bin  0x8000000'
-
 resetlocal:
 	@ echo "local reset"
 	@ st-flash reset
@@ -69,18 +38,6 @@ resetlocal:
 resetremote:
 	@ echo "$(remoteip) reset"
 	@ ssh $(remoteip) st-flash reset
-
-reset8:
-	@ echo "$(remoteip) reset"
-	@ ssh $(remoteip) st-flash --serial $(stlink8) reset
-
-reset12:
-	@ echo "$(remoteip) reset"
-	@ ssh $(remoteip) st-flash --serial $(stlink12) reset
-
-resetspare:
-	@ echo "$(remoteip) reset"
-	@ ssh $(remoteip) st-flash --serial $(stlinkspare) reset
 
 probelocal:
 	@ echo "local probe"
@@ -114,4 +71,4 @@ unlockold:
 
 flash: flashlocal
 reset: resetlocal
-probe: proberemote
+probe: probelocal

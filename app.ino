@@ -8,7 +8,6 @@ PROGMEM uint8_t font[] =
 #include "font.h"
 ;
 
-
 #define console Serial1
 
 int inc = 2;
@@ -189,7 +188,6 @@ void text() {
 
 void fontLoad() {
   display.loadRAM(RAM_G + 1000,font,sizeof(font));
-  print(sizeof(font));
 
   display.dlStart();
   display.cmd(CLEAR_COLOR_RGB(0,0,0));
@@ -215,7 +213,6 @@ void fontCustom() {
   char l[20];
   float y;
   float t = millis()/10000.0;
-uint32_t s = micros();
   display.dlStart();
   display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
   display.cmd(CLEAR(1,1,1));
@@ -258,7 +255,6 @@ uint32_t s = micros();
   display.text(370,155,4,OPT_RIGHTX,line);
 
   display.dlEnd();
-  print(micros() - s);
   delay(33);
 }
 
