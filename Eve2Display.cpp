@@ -459,3 +459,7 @@ uint8_t Eve2Display::touched() {
   return rd8(RAM_REG + REG_TOUCH_TAG);
 }
 
+void Eve2Display::rotate(uint32_t r) {
+  cmd(CMD_SETROTATE);
+  cmd(r);
+}

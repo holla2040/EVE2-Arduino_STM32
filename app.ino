@@ -121,18 +121,37 @@ void number() {
 
 void buttonSetup() {
   display.dlStart();
+  display.rotate(2);
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
 
   display.tag(1);
-  display.button(10,10,100,50,31,OPT_CENTER,"1");
+  display.button(5,10,80,50,31,OPT_CENTER,"1");
   display.tag(2);
-  display.button(10,70,100,50,31,OPT_CENTER,"2");
+  display.button(95,10,80,50,31,OPT_CENTER,"2");
   display.tag(3);
-  display.button(10,130,100,50,31,OPT_CENTER,"3");
-  display.tag(4);
-  display.button(10,190,100,50,31,OPT_CENTER,"4");
+  display.button(185,10,80,50,31,OPT_CENTER,"3");
 
+  display.tag(4);
+  display.button(5,70,80,50,31,OPT_CENTER,"4");
+  display.tag(5);
+  display.button(95,70,80,50,31,OPT_CENTER,"5");
+  display.tag(6);
+  display.button(185,70,80,50,31,OPT_CENTER,"6");
+
+  display.tag(7);
+  display.button(5,130,80,50,31,OPT_CENTER,"7");
+  display.tag(8);
+  display.button(95,130,80,50,31,OPT_CENTER,"8");
+  display.tag(9);
+  display.button(185,130,80,50,31,OPT_CENTER,"9");
+
+  display.tag(10);
+  display.button(5,190,80,50,29,OPT_CENTER,"Delete");
+  display.tag(11);
+  display.button(95,190,80,50,31,OPT_CENTER,"0");
+  display.tag(12);
+  display.button(185,190,80,50,29,OPT_CENTER,"Enter");
   display.dlEnd();
   delay(1000);
 }

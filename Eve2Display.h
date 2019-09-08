@@ -54,6 +54,7 @@ class Eve2Display {
 
     void tag(uint8_t i);
     uint8_t touched();
+    void rotate(uint32_t r);
 
 
   private:
