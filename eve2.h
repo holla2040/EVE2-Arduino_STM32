@@ -383,23 +383,24 @@
 #define CLEAR(c,s,t) ((38UL<<24)|(((c)&1UL)<<2)|(((s)&1UL)<<1)|(((t)&1UL)<<0))                                                                                           // CLEAR - FT-PG Section 4.21
 #define CLEAR_COLOR_RGB(red,green,blue) ((2UL<<24)|(((red)&255UL)<<16)|(((green)&255UL)<<8)|(((blue)&255UL)<<0))                                                         // CLEAR_COLOR_RGB - FT-PG Section 4.23
 #define COLOR_RGB(red,green,blue) ((4UL<<24)|(((red)&255UL)<<16)|(((green)&255UL)<<8)|(((blue)&255UL)<<0))                                                               // COLOR_RGB - FT-PG Section 4.28
-#define VERTEX2II(x,y,handle,cell) ((2UL<<30)|(((x)&511UL)<<21)|(((y)&511UL)<<12)|(((handle)&31UL)<<7)|(((cell)&127UL)<<0))                                              // VERTEX2II - FT-PG Section 4.48
-#define VERTEX2F(x,y) ((1UL<<30)|(((x)&32767UL)<<15)|(((y)&32767UL)<<0))                                                                                                 // VERTEX2F - FT-PG Section 4.47
-#define CELL(cell) ((6UL<<24)|(((cell)&127UL)<<0))                                                                                                                       // CELL - FT-PG Section 4.20
-#define BITMAP_HANDLE(handle) ((5UL<<24) | (((handle) & 31UL) << 0))                                                                                                     // BITMAP_HANDLE - FT-PG Section 4.06
-#define BITMAP_SOURCE(addr) ((1UL<<24)|(((addr)&1048575UL)<<0))                                                                                                          // BITMAP_SOURCE - FT-PG Section 4.11
+#define VERTEX2II(x,y,handle,cell) ((0x02<<30)|(((x)&511UL)<<21)|(((y)&511UL)<<12)|(((handle)&31UL)<<7)|(((cell)&127UL)<<0))                                              // VERTEX2II - FT-PG Section 4.48
+#define VERTEX2F(x,y) ((0x01<<30)|(((x)&32767UL)<<15)|(((y)&32767UL)<<0))                                                                                                 // VERTEX2F - FT-PG Section 4.47
+#define CELL(cell) ((6UL<<24)|(((cell)&127UL)<<0))                            // CELL - FT-PG Section 4.20
+#define BITMAP_HANDLE(handle) ((5UL<<24) | (((handle) & 31UL) << 0))          // BITMAP_HANDLE - FT-PG Section 4.06
+#define BITMAP_SOURCE(addr) ((1UL<<24)|(((addr)&1048575UL)<<0))               // BITMAP_SOURCE - FT-PG Section 4.11
 #define BITMAP_LAYOUT(format,linestride,height) ((7UL<<24)|(((format)&31UL)<<19)|(((linestride)&1023UL)<<9)|(((height)&511UL)<<0))                                       // BITMAP_LAYOUT - FT-PG Section 4.07
 #define BITMAP_SIZE(filter,wrapx,wrapy,width,height) ((8UL<<24)|(((filter)&1UL)<<20)|(((wrapx)&1UL)<<19)|(((wrapy)&1UL)<<18)|(((width)&511UL)<<9)|(((height)&511UL)<<0)) // BITMAP_SIZE - FT-PG Section 4.09
 #define TAG(s) ((3UL<<24)|(((s)&255UL)<<0))                                                                                                                              // TAG - FT-PG Section 4.43
-#define POINT_SIZE(sighs) ((13UL<<24)|(((sighs)&8191UL)<<0))                                                                                                             // POINT_SIZE - FT-PG Section 4.36
-#define BEGIN(PrimitiveTypeRef) ((31UL<<24)|(((PrimitiveTypeRef)&15UL)<<0))                                                                                              // BEGIN - FT-PG Section 4.05
-#define END() ((33UL<<24))                                                                                                                                               // END - FT-PG Section 4.30
-#define DISPLAY() ((0UL<<24))                                                                                                                                            // DISPLAY - FT-PG Section 4.29
+#define POINT_SIZE(sighs) ((13UL<<24)|(((sighs)&8191UL)<<0))                  // POINT_SIZE - FT-PG Section 4.36
+#define BEGIN(PrimitiveTypeRef) ((0x1F<<24)|(((PrimitiveTypeRef)&15UL)<<0))   // BEGIN - FT-PG Section 4.05
+#define END()                   ((0x21<<24))                                  // END - FT-PG Section 4.30
+#define DISPLAY()               ((0x00<<24))                                  // DISPLAY - FT-PG Section 4.29
 
 // Non FTDI Helper Macros
 #define MAKE_COLOR(r,g,b) (( r << 16) | ( g << 8) | (b))
 
 #define SAVE_CONTEXT() (0x22 << 23)
 #define RESTORE_CONTEXT() (0x23 << 23)
-#define COLOR_RGB_COLOR(color) ((4UL<<24)|(color&0x00FFFFFF))
+#define COLOR_RGB_COLOR(color) ((0x04<<24)|(color&0x00FFFFFF))
+#define VERTEX_FORMAT(frac) ((0x27<<24)|(frac&0x03))
 #endif

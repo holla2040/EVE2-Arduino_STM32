@@ -289,34 +289,55 @@ void Eve2Display::bgcolor(uint32_t color) {
   cmd(color);
 }
 
+void Eve2Display::rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t bordersize, uint32_t bordercolor, uint8_t filled) {
+}
+
 void Eve2Display::circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize, uint32_t bordercolor, uint8_t filled) {
+// doesn't work
+  cmd(BEGIN(BITMAPS));
+  cmd(VERTEX2II(100,100,31,'F'));
+  cmd(END());
+
+/*
+  cmd(VERTEX_FORMAT(0));
+  cmd(COLOR_RGB(255, 168, 64));
+  cmd(POINT_SIZE(320));
+  cmd(BEGIN(POINTS));
+  cmd(VERTEX2F(100,100));
+  cmd(END());
+*/
+
+
+
+/*
   if (bordersize) {
     cmd(SAVE_CONTEXT());
     cmd(COLOR_RGB_COLOR(bordercolor));
     cmd(POINT_SIZE(r));
     cmd(BEGIN(POINTS));
-    cmd(VERTEX2II(x,y,0,0));
+    cmd(VERTEX2F(x,y));
     cmd(END());
     if (filled) {
       cmd(RESTORE_CONTEXT());
       cmd(POINT_SIZE(r-bordersize));
       cmd(BEGIN(POINTS));
-      cmd(VERTEX2II(x,y,0,0));
+      cmd(VERTEX2F(x,y));
       cmd(END());
     } else {
       cmd(COLOR_RGB(0,0,0));
       cmd(POINT_SIZE(r-bordersize));
       cmd(BEGIN(POINTS));
-      cmd(VERTEX2II(x,y,0,0));
+      cmd(VERTEX2F(x,y));
       cmd(END());
       cmd(RESTORE_CONTEXT());
     }
   } else {
     cmd(POINT_SIZE(r));
     cmd(BEGIN(POINTS));
-    cmd(VERTEX2II(x,y,0,0));
+    cmd(VERTEX2F(x,y));
     cmd(END());
   }
+*/
 }
 
 void Eve2Display::cmdString(const char *str) {

@@ -32,7 +32,7 @@ void setup() {
   display.bgcolor(0x001100);
   display.dlEnd();
   //fontSetup();
-  // buttonSetup();
+  //buttonSetup();
   circleSetup();
 }
 
@@ -160,8 +160,8 @@ void buttonSetup() {
 void circleSetup() {
   display.dlStart();
   display.circle(60,60,50,0xFFFFFF,5,0);
-  display.circle(260,60,50,0xFFFFFF,2,1);
-  display.circle(160,160,50,0,0,0);
+  //display.circle(260,60,50,0xFFFFFF,2,1);
+  //display.circle(160,160,50,0,0,0);
   display.dlEnd();
 }
 
