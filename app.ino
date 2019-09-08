@@ -32,7 +32,8 @@ void setup() {
   display.bgcolor(0x001100);
   display.dlEnd();
   //fontSetup();
-  buttonSetup();
+  // buttonSetup();
+  circleSetup();
 }
 
 void loop() {
@@ -47,7 +48,7 @@ void loop() {
 
   //slider();
   //number();
-  buttonLoop();
+  //buttonLoop();
   //gauge();
   //text();
 }
@@ -154,6 +155,14 @@ void buttonSetup() {
   display.button(185,190,80,50,29,OPT_CENTER,"Enter");
   display.dlEnd();
   delay(1000);
+}
+
+void circleSetup() {
+  display.dlStart();
+  display.circle(60,60,50,0xFFFFFF,5,0);
+  display.circle(260,60,50,0xFFFFFF,2,1);
+  display.circle(160,160,50,0,0,0);
+  display.dlEnd();
 }
 
 uint32_t touchTimeout;

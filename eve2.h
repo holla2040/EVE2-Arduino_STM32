@@ -399,5 +399,7 @@
 // Non FTDI Helper Macros
 #define MAKE_COLOR(r,g,b) (( r << 16) | ( g << 8) | (b))
 
-
+#define SAVE_CONTEXT() (0x22 << 23)
+#define RESTORE_CONTEXT() (0x23 << 23)
+#define COLOR_RGB_COLOR(color) ((4UL<<24)|(color&0x00FFFFFF))
 #endif

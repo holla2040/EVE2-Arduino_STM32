@@ -289,6 +289,36 @@ void Eve2Display::bgcolor(uint32_t color) {
   cmd(color);
 }
 
+void Eve2Display::circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize, uint32_t bordercolor, uint8_t filled) {
+  if (bordersize) {
+    cmd(SAVE_CONTEXT());
+    cmd(COLOR_RGB_COLOR(bordercolor));
+    cmd(POINT_SIZE(r));
+    cmd(BEGIN(POINTS));
+    cmd(VERTEX2II(x,y,0,0));
+    cmd(END());
+    if (filled) {
+      cmd(RESTORE_CONTEXT());
+      cmd(POINT_SIZE(r-bordersize));
+      cmd(BEGIN(POINTS));
+      cmd(VERTEX2II(x,y,0,0));
+      cmd(END());
+    } else {
+      cmd(COLOR_RGB(0,0,0));
+      cmd(POINT_SIZE(r-bordersize));
+      cmd(BEGIN(POINTS));
+      cmd(VERTEX2II(x,y,0,0));
+      cmd(END());
+      cmd(RESTORE_CONTEXT());
+    }
+  } else {
+    cmd(POINT_SIZE(r));
+    cmd(BEGIN(POINTS));
+    cmd(VERTEX2II(x,y,0,0));
+    cmd(END());
+  }
+}
+
 void Eve2Display::cmdString(const char *str) {
   uint16_t len = strlen(str);
   memcpy(&commands[commandIndex],str,len+1);  // this only works with little endian, it does null terminate if len NOT % FT_CMD_SIZE

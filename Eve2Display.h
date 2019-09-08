@@ -38,6 +38,7 @@ class Eve2Display {
     void romfont(uint32_t font, uint32_t romslot);
     void fgcolor(uint32_t color);
     void bgcolor(uint32_t color);
+    void circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize, uint32_t bordercolor, uint8_t filled);
     void gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range);
     void dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val);
     void text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str);
