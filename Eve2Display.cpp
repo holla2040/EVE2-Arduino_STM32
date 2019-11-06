@@ -1,22 +1,20 @@
 #include <SPI.h>
 #include "Eve2Display.h"
 
-SPISettings spiSettings(20000000, MSBFIRST, SPI_MODE0);  
+SPISettings spiSettings(2000000, MSBFIRST, SPI_MODE0);  
 #define console Serial1
 
-Eve2Display::Eve2Display(int cs, int pdn, int audio) {
+Eve2Display::Eve2Display(int cs, int pdn, int interrupt) {
   pinCS     = cs;
   pinPDN    = pdn;
-  pinAUDIO  = audio;
+  pinINT    = interrupt;
 };
 
 void Eve2Display::begin() {
   pinMode(pinCS,OUTPUT);
   pinMode(pinPDN,OUTPUT);
-  pinMode(pinAUDIO,OUTPUT);
+  pinMode(pinINT,INPUT_PULLUP);
   SPI.begin();
-
-  digitalWrite(pinAUDIO, LOW);
 
   digitalWrite(pinPDN, HIGH);
   digitalWrite(pinPDN, LOW);

@@ -15,12 +15,14 @@ int i = 0;
 char line[100];
 
 // Eve2Display(int cs, int pdn, int audio); 
-Eve2Display display(PA4,PA3,PA2);
+Eve2Display display(PB4,PB3,PB0);
 
 void setup() {
   console.begin(115200);
   console.println("\x1B[2J\x1b[H");
   console.println("\nEVE2-Arduino_STM32 setup");
+  afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
+
   display.begin();
 
   display.dlStart();

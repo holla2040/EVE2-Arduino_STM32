@@ -62,7 +62,8 @@ class Eve2Display {
   private:
     int pinCS;
     int pinPDN;
-    int pinAUDIO;
+    int pinINT;
+
     int pinMOSI;
     int pinMISO;
     int pinCLK;
