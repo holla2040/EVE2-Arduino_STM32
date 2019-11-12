@@ -12,10 +12,26 @@ PROGMEM uint8_t font[] =
 
 int inc = 2;
 int i = 0;
+int gaugevalue = 0;
 char line[100];
 
-// Eve2Display(int cs, int pdn, int audio); 
-Eve2Display display(PB4,PB3,PB0);
+// Eve2Display(int cs, int pdn, int interrupt); 
+Eve2Display display(PB4,PB3,PB5);
+
+#define PIN_SPEAKER PA4
+#define DURATION    250
+
+void beep() {
+  uint32_t timeout = millis() + 50;
+  
+  while (millis() < timeout) {
+    digitalWrite(PIN_SPEAKER, HIGH);
+    delayMicroseconds(DURATION);
+    digitalWrite(PIN_SPEAKER, LOW);
+    delayMicroseconds(DURATION);
+  }
+}
+
 
 void setup() {
   console.begin(115200);
@@ -33,26 +49,70 @@ void setup() {
   display.fgcolor(0xFF0000);
   display.bgcolor(0x001100);
   display.dlEnd();
-  //fontSetup();
-  //buttonSetup();
+  fontSetup();
+  buttonSetup();
   circleSetup();
+
+  pinMode(PIN_SPEAKER, OUTPUT);
 }
 
 void loop() {
-  //fontCustom();
-  //spinner();
-  //gradient();
-  //keys();
-  //clock();
-  //scrollbar();
-  //progress();
-  //toggle();
+  gauge();
+}
 
-  //slider();
-  //number();
-  //buttonLoop();
-  //gauge();
-  //text();
+void loopAll() {
+  switch ((millis() / 10000) % 16) {
+    case 0:
+      buttonLoop();
+      break;
+    case 1:
+      spinner();
+      break;
+    case 2:
+      fontCustom();
+      break;
+    case 3:
+      gradient();
+      break;
+    case 4:
+      keys();
+      break;
+    case 5:
+      clock();
+      break;
+    case 6:
+      scrollbar();
+      break;
+    case 7:
+      progress();
+      break;
+    case 8:
+      toggle();
+      break;
+    case 9:
+      slider();
+      break;
+    case 10:
+      number();
+      break;
+    case 11:
+      buttonLoop();
+      break;
+    case 12:
+      gauge();
+      break;
+    case 13:
+      text();
+      break;
+    case 14:
+      dro();
+      break;
+    case 15:
+      fontSize();
+      break;
+  }
+
+
 }
 
 void spinner() {
@@ -124,7 +184,7 @@ void number() {
 
 void buttonSetup() {
   display.dlStart();
-  display.rotate(2);
+  // display.rotate(2);
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(255, 255, 255));
 
@@ -173,6 +233,7 @@ void buttonLoop() {
   if (now > touchTimeout) {
     uint8_t t = display.touched();
     if (t) {
+      beep();
       sprintf(line,"%-6d touch %d",now);
       console.println(line);
     }
@@ -181,26 +242,25 @@ void buttonLoop() {
 }
 
 void gauge() {
-  sprintf(line,"%d",i);
-
+  sprintf(line,"%d",gaugevalue);
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.text(display.center,display.height - 40,3,OPT_CENTER,line);
-  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOPOINTER,10,10,i,100);
+  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOPOINTER,10,10,gaugevalue,100);
 
   display.cmd(COLOR_RGB(255, 0, 0));
-  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOTICKS,10,10,i,100);
+  display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOTICKS,10,10,gaugevalue,100);
 
   display.dlEnd();
 
-  i += inc;
-  if ((i > 100) || (i < 0)) {
+  gaugevalue += inc;
+  if ((gaugevalue > 100) || (gaugevalue < 0)) {
     inc = -inc;
-    i += inc;
-    delay(300);
+    gaugevalue += inc;
+    delay(100);
   }
 
-  delay(20);
+  delay(50);
 }
 
 uint8_t h,m,s;
@@ -281,8 +341,9 @@ void fontCustom() {
 
 void dro() {
   float y;
-  float t = millis()/10000.0;
+  float t = millis()/1000000.0;
   display.dlStart();
+  // display.rotate(2);
   display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(0,0,0));
@@ -324,6 +385,43 @@ void dro() {
   display.text(370,155,4,OPT_RIGHTX,line);
 
   display.dlEnd();
-  delay(33);
+  delay(150);
 }
 
+
+void fontSize() {
+  display.dlStart();
+  display.rotate(2);
+  display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
+  display.cmd(CLEAR(1,1,1));
+  display.cmd(COLOR_RGB(0,0,0));
+
+
+  display.text(1,1,16,0,"16 The quick brown fox jumps over the lazy dog");
+  display.text(1,30,18,0,"18 The quick brown fox jumps over the lazy dog");
+  display.text(1,60,20,0,"20 The quick brown fox jumps over the lazy dog");
+  display.text(1,90,21,0,"21 The quick brown fox jumps over the lazy dog");
+  display.text(1,120,22,0,"22 The quick brown fox jumps over the lazy dog");
+  display.text(1,150,23,0,"23 The quick brown fox jumps over the lazy dog");
+  display.text(1,180,24,0,"24 The quick brown fox jumps over the lazy dog");
+  display.text(1,205,25,0,"25 The quick brown fox jumps over the lazy dog");
+  display.text(1,250,26,0,"26 The quick brown fox jumps over the lazy dog");
+  display.text(1,270,27,0,"27 The quick brown fox jumps over the lazy dog");
+  display.text(1,300,28,0,"28 The quick brown fox jumps over the lazy dog");
+  display.text(1,330,29,0,"29 The quick brown fox jumps over the lazy dog");
+  display.text(1,360,30,0,"30 The quick brown fox jumps over the lazy dog");
+  display.text(1,390,31,0,"31 The quick brown fox jumps over the lazy dog");
+  display.text(1,430,1,0,"1 The quick brown fox jumps over the lazy dog");
+  display.text(1,470,2,0,"2 The quick brown fox jumps over the lazy dog");
+  display.text(1,520,3,0,"3 The quick brown fox jumps over the lazy dog");
+  display.text(1,580,4,0,"4 The quick brown fox jumps over the lazy dog");
+
+  display.text(1,670,14,0,"14 +123.456"); // custom font is only numbers and +-.
+  display.text(1,710,23,0,"note 14 is custom mono font with numbers-only char set");
+
+  display.dlEnd();
+  delay(2000);
+  display.dlStart();
+  display.rotate(0);
+  display.dlEnd();
+}

@@ -3,9 +3,9 @@
 /* pulled from matrix orbital's EVE-School repo https://github.com/MatrixOrbital/EVE-School */
 
 //User selectable configurations.
-//#define EVE2_70
+#define EVE2_70
 //#define EVE2_50
-#define EVE2_43
+//#define EVE2_43
 //#define EVE2_38
 //#define EVE2_35
 //#define EVE2_29

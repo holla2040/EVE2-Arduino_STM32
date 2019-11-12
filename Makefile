@@ -69,6 +69,6 @@ unlockold:
 	openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c "init;reset halt; flash banks;stm32f1x mass_erase 0;stm32f1x unlock 0"
 
 
-flash: flashlocal
+flash: bin flashlocal
 reset: resetlocal
 probe: probelocal
