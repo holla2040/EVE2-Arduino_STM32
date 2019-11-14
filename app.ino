@@ -8,12 +8,19 @@ PROGMEM uint8_t font[] =
 #include "font.h"
 ;
 
-#define console Serial1
+#define console Serial
 
 int inc = 2;
 int i = 0;
 int gaugevalue = 0;
 char line[100];
+
+uint8_t navTabSelected = 0;
+#define NAVTABENTRYLEN 10
+#define NAVTABHEIGHT 50 
+#define NAVTABWIDTH  100 
+char navTabEntries[5][NAVTABENTRYLEN] = {'Home','Regen','System','Control','Relays'};
+// navTabs are tagged starting at 240
 
 // Eve2Display(int cs, int pdn, int interrupt); 
 Eve2Display display(PB4,PB3,PB5);
@@ -34,10 +41,11 @@ void beep() {
 
 
 void setup() {
-  console.begin(115200);
-  console.println("\x1B[2J\x1b[H");
-  console.println("\nEVE2-Arduino_STM32 setup");
   afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
+  console.begin(115200);
+  delay(2500);
+  console.println("\x1B[2J\x1b[H");
+  console.println("EVE2-Arduino_STM32 setup");
 
   display.begin();
 
@@ -49,15 +57,22 @@ void setup() {
   display.fgcolor(0xFF0000);
   display.bgcolor(0x001100);
   display.dlEnd();
-  fontSetup();
-  buttonSetup();
-  circleSetup();
+  //fontSetup();
+  // buttonSetup();
+  // circleSetup();
+
+  navBarSetup();
 
   pinMode(PIN_SPEAKER, OUTPUT);
+  console.println("setup done");
 }
 
 void loop() {
-  gauge();
+  //dro();
+  //gauge();
+  //fontSize();
+  navBarLoop();
+  //loopAll();
 }
 
 void loopAll() {
@@ -216,7 +231,6 @@ void buttonSetup() {
   display.tag(12);
   display.button(185,190,80,50,29,OPT_CENTER,"Enter");
   display.dlEnd();
-  delay(1000);
 }
 
 void circleSetup() {
@@ -343,7 +357,7 @@ void dro() {
   float y;
   float t = millis()/1000000.0;
   display.dlStart();
-  // display.rotate(2);
+  display.rotate(2);
   display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(0,0,0));
@@ -420,8 +434,37 @@ void fontSize() {
   display.text(1,710,23,0,"note 14 is custom mono font with numbers-only char set");
 
   display.dlEnd();
-  delay(2000);
+}
+
+void navBarSetup() {
   display.dlStart();
-  display.rotate(0);
+  display.rotate(2);
+  navBarAdd();
   display.dlEnd();
+}
+  
+void navBarAdd() {
+  for (uint8_t i = 0; i < 5; i++) {
+    console.println(navTabEntries[i]);
+    if (i == navTabSelected ) {
+      display.fgcolor(0xFF0000);
+    } else {
+      display.fgcolor(0x888888);
+    }
+    display.tag(i);
+    display.button(NAVTABWIDTH+i,10,NAVTABWIDTH,NAVTABHEIGHT,31,OPT_CENTER,navTabEntries[i]);
+  }
+}
+
+void navBarLoop() {
+  uint32_t now = millis();
+  if (now > touchTimeout) {
+    uint8_t t = display.touched();
+    if (t) {
+      beep();
+      sprintf(line,"%-6d touch %d",now);
+      console.println(line);
+    }
+    touchTimeout = now + 200;
+  }
 }
