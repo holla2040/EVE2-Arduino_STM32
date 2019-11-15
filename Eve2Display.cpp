@@ -540,7 +540,7 @@ void Eve2Display::rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, 
     cmd(VERTEX2F(x+(width-borderRadius-borderWidth),y+(height-borderRadius-borderWidth)));
     cmd(END());
   } else {
-    cmd(COLOR_RGB(borderColor) );
+    cmd(COLOR_RGB(backgroundColor) );
     cmd(LINE_WIDTH((borderRadius+1)*16));
     cmd(BEGIN(RECTS) );
     cmd(VERTEX2F(x+borderRadius,y+borderRadius) );

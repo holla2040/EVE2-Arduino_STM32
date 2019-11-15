@@ -22,13 +22,18 @@ CMD_SPINNER     NO          NO          YES
 
 #define BLACK   0x000000
 #define GRAY    0x808080
+#define LTGRAY  0xD3D3D3
 #define SILVER  0xC0C0C0
 #define WHITE   0xFFFFFF
 #define MAROON  0x800000
 #define RED     0xFF0000
 #define OLIVE   0x808000
 #define YELLOW  0xFFFF00
+#define LTYELLOW 0xFBEDCB
 #define GREEN   0x008000
+#define GREENSTOP  0x33A532
+#define GREENPALE  0xD9FFB3
+#define LTGREEN 0x00F000
 #define LIME    0x00FF00
 #define TEAL    0x008080
 #define AQUA    0x00FFFF
@@ -36,9 +41,6 @@ CMD_SPINNER     NO          NO          YES
 #define BLUE    0x0000FF
 #define PURPLE  0x800080
 #define FUCHSIA 0xFF00FF
-
-
-
 
 
 enum {SILENT,FATAL,ERROR,WARNING,INFO,DEBUG,DEBUG1,DEBUG2,VERBOSE};

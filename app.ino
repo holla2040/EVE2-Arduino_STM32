@@ -13,6 +13,9 @@ int i = 0;
 int gaugevalue = 0;
 char line[100];
 
+int dir = -1;
+float t2 = 15.2;
+
 uint8_t navTabSelected = 0;
 #define NAVTABENTRYLEN 10
 #define NAVTABHEIGHT 50 
@@ -25,23 +28,6 @@ Eve2Display display(PB4,PB3,PB5);
 
 #define PIN_SPEAKER PA4
 #define DURATION    250
-
-void rect() {
-  display.dlStart();
-  display.rotate(2);
-  display.clear(0xFFFFFF);
-
-  //      rect(x,   y,    width, height, borderWidth, borderRadius, borderColor, backgroundColor);
-
-  display.rect(000, 000,  80,    100,    0,           0,            BLACK,       WHITE);
-  display.rect( 80, 100,  80,    100,    1,           0,            BLACK,       WHITE   );
-  display.rect(160, 200,  80,    100,    2,           5,            TEAL,        MAROON);
-  display.rect(240, 300,  80,    100,    0,           20,           PURPLE,      0xAAAAAA);
-  display.rect(320, 400,  80,    100,    2,           0,            BLACK,       WHITE   );
-  display.rect(400, 500,  80,    100,    0,           0,            0x000077,    0xAAAAAA);
-
-  display.dlEnd();
-}
 
 void beep() {
   uint32_t timeout = millis() + 50;
@@ -76,12 +62,13 @@ void setup() {
   // buttonSetup();
   // circleSetup();
 
-  // navBarSetup();
+  navBarSetup();
 
   pinMode(PIN_SPEAKER, OUTPUT);
   console.println("setup done");
   //primitives();
-  rect();
+  //rect();
+  statusSetup();
 }
 
 void loop() {
@@ -91,6 +78,7 @@ void loop() {
   //navBarLoop();
   //loopAll();
   //rect();
+  statusLoop();
 }
 
 void loopAll() {
@@ -454,42 +442,6 @@ void fontSize() {
   display.dlEnd();
 }
 
-void navBarSetup() {
-  display.dlStart();
-  display.rotate(2);
-  display.clear(0xFFFFFF);
-  navBarAdd();
-  display.dlEnd();
-}
-  
-void navBarAdd() {
-  for (uint8_t i = 0; i < (sizeof(navTabEntries)/NAVTABENTRYLEN); i++) {
-    if (i == navTabSelected ) {
-      display.fgcolor(0xFF0000);
-    } else {
-      display.fgcolor(0x888888);
-    }
-    display.tag(i+1);
-    display.rgbcolor(0xFFFFFF);
-    display.button(3+((3+NAVTABWIDTH)*i),10,NAVTABWIDTH,NAVTABHEIGHT,24,OPT_CENTER,navTabEntries[i]);
-  }
-}
-
-void navBarLoop() {
-  uint32_t now = millis();
-  if (now > touchTimeout) {
-    uint8_t t = display.touched();
-    if (t) {
-      navTabSelected = t-1;
-      beep();
-      sprintf(line,"%-6d touch %d",now,navTabSelected);
-      console.println(line);
-      navBarSetup(); 
-    }
-    touchTimeout = now + 200;
-  }
-}
-
 
 void primitives() {
   display.dlStart();
@@ -561,4 +513,115 @@ void primitives() {
   display.cmd(END());
 
   display.dlEnd();
+}
+
+  
+void navBarAdd() {
+  for (uint8_t i = 0; i < (sizeof(navTabEntries)/NAVTABENTRYLEN); i++) {
+    if (i == navTabSelected ) {
+      display.fgcolor(GREENSTOP);
+      display.rgbcolor(WHITE);
+    } else {
+      display.fgcolor(GREENPALE);
+      display.rgbcolor(BLACK);
+    }
+    display.tag(i+1);
+    display.button(3+((3+NAVTABWIDTH)*i),10,NAVTABWIDTH,NAVTABHEIGHT,24,OPT_CENTER,navTabEntries[i]);
+  }
+}
+
+void navBarLoop() {
+  uint32_t now = millis();
+  if (now > touchTimeout) {
+    uint8_t t = display.touched();
+    if (t) {
+      navTabSelected = t-1;
+      beep();
+      sprintf(line,"%-6d touch %d",now,navTabSelected);
+      console.println(line);
+      navBarSetup(); 
+    }
+    touchTimeout = now + 200;
+  }
+}
+
+void rect() {
+  display.dlStart();
+  display.rotate(2);
+  display.clear(0xFFFFFF);
+
+  //      rect(x,   y,    width, height, borderWidth, borderRadius, borderColor, backgroundColor);
+
+  display.rect(000, 000,  80,    100,    0,           0,            BLACK,       RED);
+  display.rect( 80, 100,  80,    100,    2,           0,            BLACK,       WHITE   );
+  display.rect(160, 200,  80,    100,    2,           5,            TEAL,        MAROON);
+  display.rect(240, 300,  80,    100,    0,           20,           PURPLE,      LIME);
+  display.rect(320, 400,  80,    100,    5,           0,            BLACK,       WHITE   );
+  display.rect(400, 500,  80,    100,    0,           0,            0x000077,    0xAAAAAA);
+
+  display.dlEnd();
+}
+
+void navBarSetup() {
+  display.dlStart();
+  display.rotate(2);
+  display.clear(LTYELLOW);
+  navBarAdd();
+  display.dlEnd();
+}
+
+void statusSetup() {
+  display.dlStart();
+  display.rotate(2);
+  display.clear(LTYELLOW);
+  navBarAdd();
+
+  display.rect(5,15+NAVTABHEIGHT,470,730,2,0,BLACK,WHITE);
+  display.cmd(COLOR_RGB(BLACK));
+  display.text(20,70,30,0,"First Stage Temperature");
+  display.text(20,90,4,0,"27.5");
+  display.text(21,91,4,0,"27.5");
+  display.text(22,92,4,0,"27.5");
+
+  t2 += dir*0.01;
+  if (t2 < 12.5) dir = 1;
+  if (t2 > 18.5) dir = -1;
+  sprintf(line,"%.1f",t2);
+  display.text(20,200,30,0,"Second Stage Temperature");
+  display.text(20,220,4,0,line);
+  display.text(21,221,4,0,line);
+  display.text(22,222,4,0,line);
+
+  display.text(20,330,30,0,"Pump Status");
+  display.text(20,350,4,0,"RUNNING");
+  display.text(21,351,4,0,"RUNNING");
+  display.text(22,351,4,0,"RUNNING");
+
+  sprintf(line,"%d",39240+millis()/1000);
+  display.text(20,460,30,0,"Hour Meter");
+  display.text(20,480,4,0,line);
+  display.text(21,481,4,0,line);
+  display.text(22,482,4,0,line);
+
+  display.text(20,590,30,0,"Hours Since Regeneration");
+  display.text(20,610,4,0,"312");
+  display.text(21,611,4,0,"312");
+  display.text(22,612,4,0,"312");
+
+  display.dlEnd();
+}
+
+void statusLoop() {
+  uint32_t now = millis();
+  if (now > touchTimeout) {
+    uint8_t t = display.touched();
+    if (t) {
+      navTabSelected = t-1;
+      beep();
+      sprintf(line,"%-6d touch %d",now,navTabSelected);
+      console.println(line);
+    }
+    touchTimeout = now + 200;
+    statusSetup(); 
+  }
 }
