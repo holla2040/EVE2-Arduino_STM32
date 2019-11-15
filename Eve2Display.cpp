@@ -277,6 +277,14 @@ void Eve2Display::romfont(uint32_t font, uint32_t romslot) {
   cmd(romslot);
 }
 
+// #define CLEAR_COLOR_RGB(red,green,blue) ((2UL<<24)|(((red)&255UL)<<16)|(((green)&255UL)<<8)|(((blue)&255UL)<<0))                                                         // CLEAR_COLOR_RGB - FT-PG Section 4.23
+// #define CLEAR(c,s,t) ((38UL<<24)|(((c)&1UL)<<2)|(((s)&1UL)<<1)|(((t)&1UL)<<0))                                                                                           // CLEAR - FT-PG Section 4.21
+
+void Eve2Display::clear(uint32_t color) {
+  cmd((2UL<<24)|(color&0xFFFFFF)); // CLEAR_COLOR_RGB
+  cmd((38UL<<24)|0x07);            // CLEAR
+}
+
 void Eve2Display::fgcolor(uint32_t color) {
   cmd(CMD_FGCOLOR);
   cmd(color);

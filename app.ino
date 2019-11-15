@@ -2,13 +2,11 @@
 #include <stdint.h>
 #include "Eve2Display.h"
 
-#define print console.println
-
+#define console Serial1
 PROGMEM uint8_t font[] = 
 #include "font.h"
 ;
 
-#define console Serial
 
 int inc = 2;
 int i = 0;
@@ -18,8 +16,8 @@ char line[100];
 uint8_t navTabSelected = 0;
 #define NAVTABENTRYLEN 10
 #define NAVTABHEIGHT 50 
-#define NAVTABWIDTH  100 
-char navTabEntries[5][NAVTABENTRYLEN] = {'Home','Regen','System','Control','Relays'};
+#define NAVTABWIDTH  92
+char navTabEntries[][NAVTABENTRYLEN] = {"Home","Run","System","Control","Relays"};
 // navTabs are tagged starting at 240
 
 // Eve2Display(int cs, int pdn, int interrupt); 
@@ -43,7 +41,6 @@ void beep() {
 void setup() {
   afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
   console.begin(115200);
-  delay(2500);
   console.println("\x1B[2J\x1b[H");
   console.println("EVE2-Arduino_STM32 setup");
 
@@ -439,20 +436,20 @@ void fontSize() {
 void navBarSetup() {
   display.dlStart();
   display.rotate(2);
+  display.clear(0x883388);
   navBarAdd();
   display.dlEnd();
 }
   
 void navBarAdd() {
-  for (uint8_t i = 0; i < 5; i++) {
-    console.println(navTabEntries[i]);
+  for (uint8_t i = 0; i < (sizeof(navTabEntries)/NAVTABENTRYLEN); i++) {
     if (i == navTabSelected ) {
       display.fgcolor(0xFF0000);
     } else {
       display.fgcolor(0x888888);
     }
-    display.tag(i);
-    display.button(NAVTABWIDTH+i,10,NAVTABWIDTH,NAVTABHEIGHT,31,OPT_CENTER,navTabEntries[i]);
+    display.tag(i+1);
+    display.button(10+(NAVTABWIDTH*i),10,NAVTABWIDTH,NAVTABHEIGHT,28,OPT_CENTER,navTabEntries[i]);
   }
 }
 
@@ -461,9 +458,11 @@ void navBarLoop() {
   if (now > touchTimeout) {
     uint8_t t = display.touched();
     if (t) {
+      navTabSelected = t-1;
       beep();
-      sprintf(line,"%-6d touch %d",now);
+      sprintf(line,"%-6d touch %d",now,navTabSelected);
       console.println(line);
+      navBarSetup(); 
     }
     touchTimeout = now + 200;
   }

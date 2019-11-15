@@ -24,9 +24,7 @@ usb:
 	~/Arduino/hardware/Arduino_STM32/tools/linux/maple_upload ttyACM0 2 1EAF:0003 /tmp/arduino_build/$(ino).bin 
 
 flashlocal:
-	- pkill -9 -f microcom
 	~/bin/st-flash write /tmp/arduino_build/$(ino).bin  0x8000000
-	- pkill -9 -f sleep
 
 flashremote:
 	@ echo "scp to "$(remoteip)", flashing"

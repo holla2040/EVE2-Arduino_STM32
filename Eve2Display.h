@@ -36,6 +36,7 @@ class Eve2Display {
 
     /* widgets */
     void romfont(uint32_t font, uint32_t romslot);
+    void clear(uint32_t color);
     void fgcolor(uint32_t color);
     void bgcolor(uint32_t color);
     void circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize, uint32_t bordercolor, uint8_t filled);
