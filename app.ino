@@ -70,6 +70,7 @@ void loop() {
   //fontSize();
   navBarLoop();
   //loopAll();
+  rect();
 }
 
 void loopAll() {
@@ -436,8 +437,9 @@ void fontSize() {
 void navBarSetup() {
   display.dlStart();
   display.rotate(2);
-  display.clear(0x883388);
+  display.clear(0xFFFFFF);
   navBarAdd();
+  rect();
   display.dlEnd();
 }
   
@@ -466,4 +468,8 @@ void navBarLoop() {
     }
     touchTimeout = now + 200;
   }
+}
+
+void rect() {
+  display.rect(200,200,50,50,2,0,0x00FF00,0x0000FF);
 }

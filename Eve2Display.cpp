@@ -285,9 +285,8 @@ void Eve2Display::clear(uint32_t color) {
   cmd((38UL<<24)|0x07);            // CLEAR
 }
 
-void Eve2Display::fgcolor(uint32_t color) {
-  cmd(CMD_FGCOLOR);
-  cmd(color);
+void Eve2Display::rgbcolor(uint32_t color) {
+  cmd(4UL<<24|(color&0xFFFFFF));
 }
 
 void Eve2Display::bgcolor(uint32_t color) {
@@ -295,7 +294,9 @@ void Eve2Display::bgcolor(uint32_t color) {
   cmd(color);
 }
 
-void Eve2Display::rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t bordersize, uint32_t bordercolor, uint8_t filled) {
+void Eve2Display::fgcolor(uint32_t color) {
+  cmd(CMD_FGCOLOR);
+  cmd(color);
 }
 
 void Eve2Display::circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize, uint32_t bordercolor, uint8_t filled) {
@@ -519,4 +520,14 @@ uint8_t Eve2Display::touched() {
 void Eve2Display::rotate(uint32_t r) {
   cmd(CMD_SETROTATE);
   cmd(r);
+}
+
+
+
+void Eve2Display::rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t borderWidth, uint8_t borderRadius, uint32_t borderColor, uint32_t backgroundColor) {
+  rgbcolor(borderColor);
+  cmd((0x0E<<24)|borderWidth);  
+  cmd(BEGIN(RECTS));
+  cmd((0x01<<30)|((x&0x7FFF)<<15)|(y&0x7FFF)); //vertex2f
+  cmd((0x01<<30)|(((x+width)&0x7FFF)<<15)|((y+height)&0x7FFF)); //vertex2f
 }

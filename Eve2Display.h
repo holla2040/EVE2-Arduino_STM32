@@ -4,6 +4,24 @@
 #include <stdint.h>
 #include "eve2.h"
 
+/*
+Widget          CMD_FGCOLOR CMD_BGCOLOR COLOR_RGB
+CMD_TEXT        NO          NO          YES
+CMD_BUTTON      YES         NO          YES(label)
+CMD_GAUGE       NO          YES         YES(needle and mark)
+CMD_KEYS        YES         NO          YES(text)
+CMD_PROGRESS    NO          YES         YES
+CMD_SCROLLBAR   YES(Inner)  YES(Outer)  NO
+CMD_SLIDER      YES(Knob)   YES(Right)  YES(Left)
+CMD_DIAL        YES(Knob)   NO          YES(Marker)
+CMD_TOGGLE      YES(Knob)   YES(Bar)    YES(Text)
+CMD_NUMBER      NO          NO          YES
+CMD_CALIBRATE   YES(Adot)   YES(Oudot)  NO
+CMD_SPINNER     NO          NO          YES
+*/
+
+
+
 enum {SILENT,FATAL,ERROR,WARNING,INFO,DEBUG,DEBUG1,DEBUG2,VERBOSE};
 
 class Eve2Display {
@@ -39,6 +57,7 @@ class Eve2Display {
     void clear(uint32_t color);
     void fgcolor(uint32_t color);
     void bgcolor(uint32_t color);
+    void rgbcolor(uint32_t color);
     void circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize, uint32_t bordercolor, uint8_t filled);
     void rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t bordersize, uint32_t bordercolor, uint8_t filled);
     void gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range);
@@ -58,6 +77,8 @@ class Eve2Display {
     void tag(uint8_t i);
     uint8_t touched();
     void rotate(uint32_t r);
+
+    void rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t borderWidth, uint8_t borderRadius, uint32_t borderColor, uint32_t backgroundColor);
 
 
   private:
