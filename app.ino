@@ -54,23 +54,25 @@ void setup() {
   display.fgcolor(0xFF0000);
   display.bgcolor(0x001100);
   display.dlEnd();
-  //fontSetup();
+
+  // fontSetup();
   // buttonSetup();
   // circleSetup();
 
-  navBarSetup();
+  // navBarSetup();
 
   pinMode(PIN_SPEAKER, OUTPUT);
   console.println("setup done");
+  primitives();
 }
 
 void loop() {
   //dro();
   //gauge();
   //fontSize();
-  navBarLoop();
+  //navBarLoop();
   //loopAll();
-  rect();
+  //rect();
 }
 
 void loopAll() {
@@ -131,7 +133,7 @@ void loopAll() {
 void spinner() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 50, 255));
+  display.cmd(COLOR_RGB(0xFF32FF));
   display.spinner(display.center,display.middle,0,2);
   display.dlEnd();
 }
@@ -139,7 +141,7 @@ void spinner() {
 void toggle() { // not functioning
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
+  display.cmd(COLOR_RGB(0xFFFFFF));
   console.println(i&0x01);
   display.toggle(display.center,display.middle,80,30,0,((i++)&0x01)*65535,"yes\xFFno");
   display.dlEnd();
@@ -149,7 +151,7 @@ void toggle() { // not functioning
 void keys() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
+  display.cmd(COLOR_RGB(0xFFFFFF));
   display.keys(display.center-200,display.middle-50,400,100,28,0,"ABCDE");
   display.dlEnd();
   delay(1000);
@@ -158,7 +160,7 @@ void keys() {
 void slider() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
+  display.cmd(COLOR_RGB(0xFFFFFF));
   display.slider(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
   display.dlEnd();
   i += 5;
@@ -168,7 +170,7 @@ void slider() {
 void scrollbar() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
+  display.cmd(COLOR_RGB(0xFFFFFF));
   display.scrollbar(20,display.middle,display.width - 50,20,0,i%100,20,100);
   display.dlEnd();
   console.println(i);
@@ -179,7 +181,7 @@ void scrollbar() {
 void progress() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
+  display.cmd(COLOR_RGB(0xFFFFFF));
   display.progress(20,display.middle,display.width - 50,20,OPT_CENTER,i%100,100);
   display.dlEnd();
   i += 5;
@@ -189,7 +191,7 @@ void progress() {
 void number() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
+  display.cmd(COLOR_RGB(0xFFFFFF));
   display.number(display.center,display.middle,4,OPT_CENTER|OPT_SIGNED,i++);
   display.dlEnd();
   delay(100);
@@ -199,7 +201,7 @@ void buttonSetup() {
   display.dlStart();
   // display.rotate(2);
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(255, 255, 255));
+  display.cmd(COLOR_RGB(0xFFFFFF));
 
   display.tag(1);
   display.button(5,10,80,50,31,OPT_CENTER,"1");
@@ -260,7 +262,7 @@ void gauge() {
   display.text(display.center,display.height - 40,3,OPT_CENTER,line);
   display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOPOINTER,10,10,gaugevalue,100);
 
-  display.cmd(COLOR_RGB(255, 0, 0));
+  display.cmd(COLOR_RGB(0xFF0000));
   display.gauge(display.center,display.middle,display.height/1.9,OPT_FLAT|OPT_NOBACK|OPT_NOTICKS,10,10,gaugevalue,100);
 
   display.dlEnd();
@@ -280,7 +282,7 @@ void clock() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
   display.clock(display.center,display.middle,125,OPT_FLAT|OPT_NOBACK|OPT_NOHANDS,h,m,s,0);
-  display.cmd(COLOR_RGB(255,0,0));
+  display.cmd(COLOR_RGB(0xFF0000));
   display.clock(display.center,display.middle,125,OPT_FLAT|OPT_NOBACK|OPT_NOTICKS,h,m,s,0);
   display.dlEnd();
 
@@ -297,7 +299,7 @@ void clock() {
 void gradient() {
   display.dlStart();
   display.cmd(CLEAR(1,1,1));
-  display.gradient(10,10,COLOR_RGB(255, 255, 0), display.width-10,display.height-10,COLOR_RGB(0, 255, 255));
+  display.gradient(10,10,COLOR_RGB(0xFFFF00), display.width-10,display.height-10,COLOR_RGB(0x00FFFF));
   display.dlEnd();
   delay(1000);
 }
@@ -314,7 +316,7 @@ void fontSetup() {
   display.loadRAM(RAM_G + 1000,font,sizeof(font));
 
   display.dlStart();
-  display.cmd(CLEAR_COLOR_RGB(0,0,0));
+  display.cmd(CLEAR_COLOR_RGB(0x000000));
   display.cmd(CLEAR(1,1,1));
   display.bitmaphandle(14);
 
@@ -343,9 +345,9 @@ void fontSetup() {
 
 void fontCustom() {
   display.dlStart();
-  display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
+  display.cmd(CLEAR_COLOR_RGB(0xFFFFFF)); 
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(0,0,0));
+  display.cmd(COLOR_RGB(0x000000));
   display.text(0,0,14,0,"+123.456");
   display.dlEnd();
   delay(100); 
@@ -356,9 +358,9 @@ void dro() {
   float t = millis()/1000000.0;
   display.dlStart();
   display.rotate(2);
-  display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
+  display.cmd(CLEAR_COLOR_RGB(0xFFFFFF)); 
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(0,0,0));
+  display.cmd(COLOR_RGB(0x000000));
   display.text(0,0,29,0,"X");
   display.text(0,84,29,0,"Y");
   display.text(0,169,29,0,"Z");
@@ -366,9 +368,9 @@ void dro() {
   // X
   y = 999*sin(t);
   if (abs(y) > 800.0) {
-    display.cmd(COLOR_RGB(255,0,0));
+    display.cmd(COLOR_RGB(0xFF0000));
   } else {
-    display.cmd(COLOR_RGB(0,0,0));
+    display.cmd(COLOR_RGB(0x000000));
   }
   sprintf(line,"%04.03f",y);
   display.text(370,-15,4,OPT_RIGHTX,line);
@@ -376,9 +378,9 @@ void dro() {
   // Y
   y = 999*sin(3 + t);
   if (abs(y) > 800.0) {
-    display.cmd(COLOR_RGB(255,0,0));
+    display.cmd(COLOR_RGB(0xFF0000));
   } else {
-    display.cmd(COLOR_RGB(0,0,0));
+    display.cmd(COLOR_RGB(0x000000));
   }
   sprintf(line,"%04.03f",y);
   display.text(370,70,4,OPT_RIGHTX,line);
@@ -386,13 +388,13 @@ void dro() {
   // Z 
   y = 999*sin(4 + millis()/10000000.0);
   sprintf(line,"%04.03f",y);
-  display.cmd(COLOR_RGB(200,200,200));
+  display.cmd(COLOR_RGB(0xC8C8C8));
   display.text(373,158,4,OPT_RIGHTX,line);
 
   if (abs(y) > 800.0) {
-    display.cmd(COLOR_RGB(255,0,0));
+    display.cmd(COLOR_RGB(0xFF0000));
   } else {
-    display.cmd(COLOR_RGB(0,0,0));
+    display.cmd(COLOR_RGB(0x000000));
   }
   display.text(370,155,4,OPT_RIGHTX,line);
 
@@ -404,9 +406,9 @@ void dro() {
 void fontSize() {
   display.dlStart();
   display.rotate(2);
-  display.cmd(CLEAR_COLOR_RGB(255,255,255)); 
+  display.cmd(CLEAR_COLOR_RGB(0xFFFFFF)); 
   display.cmd(CLEAR(1,1,1));
-  display.cmd(COLOR_RGB(0,0,0));
+  display.cmd(COLOR_RGB(0x000000));
 
 
   display.text(1,1,16,0,"16 The quick brown fox jumps over the lazy dog");
@@ -439,7 +441,6 @@ void navBarSetup() {
   display.rotate(2);
   display.clear(0xFFFFFF);
   navBarAdd();
-  rect();
   display.dlEnd();
 }
   
@@ -451,7 +452,8 @@ void navBarAdd() {
       display.fgcolor(0x888888);
     }
     display.tag(i+1);
-    display.button(10+(NAVTABWIDTH*i),10,NAVTABWIDTH,NAVTABHEIGHT,28,OPT_CENTER,navTabEntries[i]);
+    display.rgbcolor(0xFFFFFF);
+    display.button(3+((3+NAVTABWIDTH)*i),10,NAVTABWIDTH,NAVTABHEIGHT,24,OPT_CENTER,navTabEntries[i]);
   }
 }
 
@@ -471,5 +473,80 @@ void navBarLoop() {
 }
 
 void rect() {
-  display.rect(200,200,50,50,2,0,0x00FF00,0x0000FF);
+  display.dlStart();
+  display.rotate(2);
+  display.clear(0xFFFFFF);
+//  display.rect(200,200,50,50,100,10,0x00FF00,0x0000FF);
+  display.dlEnd();
+}
+
+void primitives() {
+  display.dlStart();
+  display.rotate(2);
+  display.clear(0xFFFFFF);
+
+  // circle
+  display.cmd(COLOR_RGB(0x7F2020));
+  display.cmd(POINT_SIZE(500));
+  display.cmd(BEGIN(POINTS));
+  display.cmd(VERTEX2II(192,133,0,0));
+  display.cmd(END());
+
+  // letter
+  display.cmd(COLOR_RGB(0x7F2020));
+  display.cmd(BEGIN(BITMAPS));
+  display.cmd(VERTEX2II(220, 110, 4, 'F'));
+  display.cmd(END());
+
+  // line
+  display.cmd(BEGIN(LINES));
+  display.cmd(LINE_WIDTH(3*16));
+  display.cmd(VERTEX2II(50, 45, 0, 0));
+  display.cmd(VERTEX2II(110, 55, 0, 0));
+  display.cmd(END());
+
+  // rect
+  display.cmd(COLOR_RGB(0x007700) );
+  display.cmd(LINE_WIDTH(16) );
+  display.cmd(BEGIN(RECTS) );
+  display.cmd(VERTEX2F(100 * 16,400 * 16) );
+  display.cmd(VERTEX2F(200 * 16,500 * 16) );
+  display.cmd(END());
+
+  // round rect
+  display.cmd(COLOR_RGB(0x7F0000) );
+  display.cmd(LINE_WIDTH(15 * 16) );
+  display.cmd(BEGIN(RECTS) );
+  display.cmd(VERTEX2F((300+15) * 16,(400+15) * 16) );
+  display.cmd(VERTEX2F((400-15) * 16,(500-15) * 16) );
+  display.cmd(END());
+
+#define BORDER 1
+  // rect with border
+  display.cmd(LINE_WIDTH(16) );
+  display.cmd(COLOR_RGB(0x000000) );
+  display.cmd(BEGIN(RECTS) );
+  display.cmd(VERTEX2F(100 * 16,600 * 16) );
+  display.cmd(VERTEX2F(200 * 16,700 * 16) );
+  display.cmd(END());
+  display.cmd(COLOR_RGB(0xFFFFFF) );
+  display.cmd(BEGIN(RECTS) );
+  display.cmd(VERTEX2F((100+BORDER) * 16,(600+BORDER) * 16) );
+  display.cmd(VERTEX2F((200-BORDER) * 16,(700-BORDER) * 16) );
+  display.cmd(END());
+
+  // round rect with border
+  display.cmd(LINE_WIDTH(15 * 16) );
+  display.cmd(COLOR_RGB(0x000000) );
+  display.cmd(BEGIN(RECTS) );
+  display.cmd(VERTEX2F((300+15) * 16,(600+15) * 16) );
+  display.cmd(VERTEX2F((400-15) * 16,(700-15) * 16) );
+  display.cmd(END());
+  display.cmd(COLOR_RGB(0xFFFFFF) );
+  display.cmd(BEGIN(RECTS) );
+  display.cmd(VERTEX2F((300+15+BORDER) * 16,(600+15+BORDER) * 16) );
+  display.cmd(VERTEX2F((400-15-BORDER) * 16,(700-15-BORDER) * 16) );
+  display.cmd(END());
+
+  display.dlEnd();
 }

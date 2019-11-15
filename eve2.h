@@ -381,8 +381,8 @@
 // These defined "macros" are supplied by FTDI - Manufacture command bit-fields from parameters
 // FT81x Series Programmers Guide is refered to as "FT-PG"
 #define CLEAR(c,s,t) ((38UL<<24)|(((c)&1UL)<<2)|(((s)&1UL)<<1)|(((t)&1UL)<<0))                                                                                           // CLEAR - FT-PG Section 4.21
-#define CLEAR_COLOR_RGB(red,green,blue) ((2UL<<24)|(((red)&255UL)<<16)|(((green)&255UL)<<8)|(((blue)&255UL)<<0))                                                         // CLEAR_COLOR_RGB - FT-PG Section 4.23
-#define COLOR_RGB(red,green,blue) ((4UL<<24)|(((red)&255UL)<<16)|(((green)&255UL)<<8)|(((blue)&255UL)<<0))                                                               // COLOR_RGB - FT-PG Section 4.28
+// #define CLEAR_COLOR_RGB(red,green,blue) ((2UL<<24)|(((red)&255UL)<<16)|(((green)&255UL)<<8)|(((blue)&255UL)<<0))                                                         // CLEAR_COLOR_RGB - FT-PG Section 4.23
+// #define COLOR_RGB(red,green,blue) ((4UL<<24)|(((red)&255UL)<<16)|(((green)&255UL)<<8)|(((blue)&255UL)<<0))                                                               // COLOR_RGB - FT-PG Section 4.28
 #define VERTEX2II(x,y,handle,cell) ((0x02<<30)|(((x)&511UL)<<21)|(((y)&511UL)<<12)|(((handle)&31UL)<<7)|(((cell)&127UL)<<0))                                              // VERTEX2II - FT-PG Section 4.48
 #define VERTEX2F(x,y) ((0x01<<30)|(((x)&32767UL)<<15)|(((y)&32767UL)<<0))                                                                                                 // VERTEX2F - FT-PG Section 4.47
 #define CELL(cell) ((6UL<<24)|(((cell)&127UL)<<0))                            // CELL - FT-PG Section 4.20
@@ -395,6 +395,12 @@
 #define BEGIN(PrimitiveTypeRef) ((0x1F<<24)|(((PrimitiveTypeRef)&15UL)<<0))   // BEGIN - FT-PG Section 4.05
 #define END()                   ((0x21<<24))                                  // END - FT-PG Section 4.30
 #define DISPLAY()               ((0x00<<24))                                  // DISPLAY - FT-PG Section 4.29
+
+
+// CH created
+#define LINE_WIDTH(width) ((0x0E<<24UL)|(width&0x7FF))
+#define COLOR_RGB(color) ((4UL<<24UL)|(color&0xFFFFFF))                                                               // COLOR_RGB - FT-PG Section 4.28
+#define CLEAR_COLOR_RGB(color) ((2UL<<24)|(color&0xFFFFFF))                                                               // COLOR_RGB - FT-PG Section 4.28
 
 // Non FTDI Helper Macros
 #define MAKE_COLOR(r,g,b) (( r << 16) | ( g << 8) | (b))

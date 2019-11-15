@@ -59,7 +59,7 @@ void Eve2Display::begin() {
 
   // make display list with bluescreen
 
-  wr32(RAM_DL+0, CLEAR_COLOR_RGB(0,0,0));
+  wr32(RAM_DL+0, CLEAR_COLOR_RGB(0x000000));
   wr32(RAM_DL+4, CLEAR(1,1,1));
   wr32(RAM_DL+8, DISPLAY());
   wr8(RAM_REG  + REG_DLSWAP, DLSWAP_FRAME);          // swap display lists
@@ -221,7 +221,7 @@ void Eve2Display::test() {
   console.println("test");
   dlStart();
   cmd(CLEAR(1,1,1));
-  cmd(COLOR_RGB(192,26,26));
+  cmd(COLOR_RGB(0xC01A1A));
   //dial(50,50,20,0,37);
   dial(150,150,40,0,37);
   dlEnd();
@@ -281,7 +281,7 @@ void Eve2Display::romfont(uint32_t font, uint32_t romslot) {
 // #define CLEAR(c,s,t) ((38UL<<24)|(((c)&1UL)<<2)|(((s)&1UL)<<1)|(((t)&1UL)<<0))                                                                                           // CLEAR - FT-PG Section 4.21
 
 void Eve2Display::clear(uint32_t color) {
-  cmd((2UL<<24)|(color&0xFFFFFF)); // CLEAR_COLOR_RGB
+  cmd(CLEAR_COLOR_RGB(color)); 
   cmd((38UL<<24)|0x07);            // CLEAR
 }
 
@@ -307,7 +307,7 @@ void Eve2Display::circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize,
 
 /*
   cmd(VERTEX_FORMAT(0));
-  cmd(COLOR_RGB(255, 168, 64));
+  cmd(COLOR_RGB(0xFFA840));
   cmd(POINT_SIZE(320));
   cmd(BEGIN(POINTS));
   cmd(VERTEX2F(100,100));
@@ -525,9 +525,19 @@ void Eve2Display::rotate(uint32_t r) {
 
 
 void Eve2Display::rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t borderWidth, uint8_t borderRadius, uint32_t borderColor, uint32_t backgroundColor) {
-  rgbcolor(borderColor);
-  cmd((0x0E<<24)|borderWidth);  
+/*
+  cmd(COLOR_RGB(borderColor));
+  cmd(LINEWIDTH(borderWidth));
   cmd(BEGIN(RECTS));
-  cmd((0x01<<30)|((x&0x7FFF)<<15)|(y&0x7FFF)); //vertex2f
-  cmd((0x01<<30)|(((x+width)&0x7FFF)<<15)|((y+height)&0x7FFF)); //vertex2f
+  cmd(VERTEX2F(x,y));
+  cmd(VERTEX2F(x+width,y+height));
+  cmd(END());
+*/
+
+cmd( COLOR_RGB(0x7F0000) );
+cmd( LINE_WIDTH(1 * 16) );
+cmd( BEGIN(RECTS) );
+cmd( VERTEX2F(28 * 16,38 * 16) );
+cmd( VERTEX2F(33 * 16,63 * 16) );
+cmd(END());
 }
