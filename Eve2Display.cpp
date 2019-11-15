@@ -522,22 +522,29 @@ void Eve2Display::rotate(uint32_t r) {
   cmd(r);
 }
 
-
-
 void Eve2Display::rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t borderWidth, uint8_t borderRadius, uint32_t borderColor, uint32_t backgroundColor) {
-/*
-  cmd(COLOR_RGB(borderColor));
-  cmd(LINEWIDTH(borderWidth));
-  cmd(BEGIN(RECTS));
-  cmd(VERTEX2F(x,y));
-  cmd(VERTEX2F(x+width,y+height));
-  cmd(END());
-*/
+  cmd(VERTEX_FORMAT(0)); // 1 for 1
 
-cmd( COLOR_RGB(0x7F0000) );
-cmd( LINE_WIDTH(1 * 16) );
-cmd( BEGIN(RECTS) );
-cmd( VERTEX2F(28 * 16,38 * 16) );
-cmd( VERTEX2F(33 * 16,63 * 16) );
-cmd(END());
+  if (borderWidth) {
+    cmd(LINE_WIDTH((borderRadius+1)*16));
+    cmd(COLOR_RGB(borderColor));
+    cmd(BEGIN(RECTS));
+    cmd(VERTEX2F(x+borderRadius,y+borderRadius));
+    cmd(VERTEX2F(x+(width-borderRadius),y+(height-borderRadius)));
+    cmd(END());
+
+    cmd(COLOR_RGB(backgroundColor));
+    cmd(LINE_WIDTH(16));
+    cmd(BEGIN(RECTS));
+    cmd(VERTEX2F(x+borderRadius+borderWidth,y+borderRadius+borderWidth));
+    cmd(VERTEX2F(x+(width-borderRadius-borderWidth),y+(height-borderRadius-borderWidth)));
+    cmd(END());
+  } else {
+    cmd(COLOR_RGB(borderColor) );
+    cmd(LINE_WIDTH((borderRadius+1)*16));
+    cmd(BEGIN(RECTS) );
+    cmd(VERTEX2F(x+borderRadius,y+borderRadius) );
+    cmd(VERTEX2F(x+(width-borderRadius),y+(height-borderRadius)));
+    cmd(END());
+  }
 }

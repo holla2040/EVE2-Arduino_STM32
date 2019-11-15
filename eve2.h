@@ -408,5 +408,5 @@
 #define SAVE_CONTEXT() (0x22 << 23)
 #define RESTORE_CONTEXT() (0x23 << 23)
 #define COLOR_RGB_COLOR(color) ((0x04<<24)|(color&0x00FFFFFF))
-#define VERTEX_FORMAT(frac) ((0x27<<24)|(frac&0x03))
+#define VERTEX_FORMAT(frac) ((0x27<<24)|(frac&0x07))
 #endif

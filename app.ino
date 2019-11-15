@@ -26,6 +26,23 @@ Eve2Display display(PB4,PB3,PB5);
 #define PIN_SPEAKER PA4
 #define DURATION    250
 
+void rect() {
+  display.dlStart();
+  display.rotate(2);
+  display.clear(0xFFFFFF);
+
+  //      rect(x,   y,    width, height, borderWidth, borderRadius, borderColor, backgroundColor);
+
+  display.rect(000, 000,  80,    100,    0,           0,            BLACK,       WHITE);
+  display.rect( 80, 100,  80,    100,    1,           0,            BLACK,       WHITE   );
+  display.rect(160, 200,  80,    100,    2,           5,            TEAL,        MAROON);
+  display.rect(240, 300,  80,    100,    0,           20,           PURPLE,      0xAAAAAA);
+  display.rect(320, 400,  80,    100,    2,           0,            BLACK,       WHITE   );
+  display.rect(400, 500,  80,    100,    0,           0,            0x000077,    0xAAAAAA);
+
+  display.dlEnd();
+}
+
 void beep() {
   uint32_t timeout = millis() + 50;
   
@@ -63,7 +80,8 @@ void setup() {
 
   pinMode(PIN_SPEAKER, OUTPUT);
   console.println("setup done");
-  primitives();
+  //primitives();
+  rect();
 }
 
 void loop() {
@@ -472,18 +490,12 @@ void navBarLoop() {
   }
 }
 
-void rect() {
-  display.dlStart();
-  display.rotate(2);
-  display.clear(0xFFFFFF);
-//  display.rect(200,200,50,50,100,10,0x00FF00,0x0000FF);
-  display.dlEnd();
-}
 
 void primitives() {
   display.dlStart();
   display.rotate(2);
   display.clear(0xFFFFFF);
+  display.cmd(VERTEX_FORMAT(4)); // 1/16
 
   // circle
   display.cmd(COLOR_RGB(0x7F2020));

@@ -20,6 +20,25 @@ CMD_CALIBRATE   YES(Adot)   YES(Oudot)  NO
 CMD_SPINNER     NO          NO          YES
 */
 
+#define BLACK   0x000000
+#define GRAY    0x808080
+#define SILVER  0xC0C0C0
+#define WHITE   0xFFFFFF
+#define MAROON  0x800000
+#define RED     0xFF0000
+#define OLIVE   0x808000
+#define YELLOW  0xFFFF00
+#define GREEN   0x008000
+#define LIME    0x00FF00
+#define TEAL    0x008080
+#define AQUA    0x00FFFF
+#define NAVY    0x000080
+#define BLUE    0x0000FF
+#define PURPLE  0x800080
+#define FUCHSIA 0xFF00FF
+
+
+
 
 
 enum {SILENT,FATAL,ERROR,WARNING,INFO,DEBUG,DEBUG1,DEBUG2,VERBOSE};
@@ -59,7 +78,6 @@ class Eve2Display {
     void bgcolor(uint32_t color);
     void rgbcolor(uint32_t color);
     void circle(uint16_t x, uint16_t y, uint16_t r, uint8_t bordersize, uint32_t bordercolor, uint8_t filled);
-    void rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t bordersize, uint32_t bordercolor, uint8_t filled);
     void gauge(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t major, uint16_t minor, uint16_t val, uint16_t range);
     void dial(uint16_t x, uint16_t y, uint16_t r, uint16_t options, uint16_t val);
     void text(uint16_t x, uint16_t y, uint16_t font, uint16_t options, const char* str);
