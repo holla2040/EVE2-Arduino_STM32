@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "Eve2Display.h"
 
-#define console Serial1
+#define console Serial4
 PROGMEM uint8_t font[] = 
 #include "font.h"
 ;
@@ -64,11 +64,12 @@ void setup() {
 
   navBarSetup();
 
-  pinMode(PIN_SPEAKER, OUTPUT);
+//  pinMode(PIN_SPEAKER, OUTPUT);
   console.println("setup done");
   //primitives();
   //rect();
   statusSetup();
+
 }
 
 void loop() {
@@ -405,7 +406,7 @@ void dro() {
   display.text(370,155,4,OPT_RIGHTX,line);
 
   display.dlEnd();
-  delay(150);
+  delay(40);
 }
 
 
@@ -564,7 +565,7 @@ void rect() {
 
 void navBarSetup() {
   display.dlStart();
-  display.rotate(2);
+  display.rotate(3);
   display.clear(LTYELLOW);
   navBarAdd();
   display.dlEnd();
@@ -572,21 +573,21 @@ void navBarSetup() {
 
 void statusSetup() {
   display.dlStart();
-  display.rotate(2);
+  display.rotate(3);
   display.clear(LTYELLOW);
   navBarAdd();
 
   display.rect(5,15+NAVTABHEIGHT,470,730,2,0,BLACK,WHITE);
   display.cmd(COLOR_RGB(BLACK));
   display.text(20,70,30,0,"First Stage Temperature");
-  display.text(20,90,4,0,"27.5");
-  display.text(21,91,4,0,"27.5");
-  display.text(22,92,4,0,"27.5");
+  display.text(20,90,4,0,"27"); // bolding
+  display.text(21,91,4,0,"27");
+  display.text(22,92,4,0,"27");
 
   t2 += dir*0.01;
   if (t2 < 12.5) dir = 1;
   if (t2 > 18.5) dir = -1;
-  sprintf(line,"%.1f",t2);
+  sprintf(line,"%d",int(t2));
   display.text(20,200,30,0,"Second Stage Temperature");
   display.text(20,220,4,0,line);
   display.text(21,221,4,0,line);
@@ -604,9 +605,11 @@ void statusSetup() {
   display.text(22,482,4,0,line);
 
   display.text(20,590,30,0,"Hours Since Regeneration");
-  display.text(20,610,4,0,"312");
+  //display.text(20,610,4,0,"312");
   display.text(21,611,4,0,"312");
-  display.text(22,612,4,0,"312");
+  display.text(21,609,4,0,"312");
+  display.text(19,611,4,0,"312");
+  display.text(19,609,4,0,"312");
 
   display.dlEnd();
 }

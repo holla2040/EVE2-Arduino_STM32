@@ -106,10 +106,6 @@ class Eve2Display {
     int pinPDN;
     int pinINT;
 
-    int pinMOSI;
-    int pinMISO;
-    int pinCLK;
-
     uint8_t logLevel;
 
     void cmdString(const char *str);

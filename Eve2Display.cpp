@@ -1,7 +1,7 @@
 #include <SPI.h>
 #include "Eve2Display.h"
 
-SPISettings spiSettings(2000000, MSBFIRST, SPI_MODE0);  
+SPISettings spiSettings(20000000, MSBFIRST, SPI_MODE0);  
 #define console Serial1
 
 Eve2Display::Eve2Display(int cs, int pdn, int interrupt) {
