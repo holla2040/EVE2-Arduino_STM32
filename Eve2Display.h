@@ -42,6 +42,8 @@ CMD_SPINNER     NO          NO          YES
 #define PURPLE  0x800080
 #define FUCHSIA 0xFF00FF
 
+#define SPEAKER  PC14
+
 
 enum {SILENT,FATAL,ERROR,WARNING,INFO,DEBUG,DEBUG1,DEBUG2,VERBOSE};
 
@@ -100,7 +102,11 @@ class Eve2Display {
 
     void rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t borderWidth, uint8_t borderRadius, uint32_t borderColor, uint32_t backgroundColor);
 
+    /* tone */
+    void tone(uint16_t frequency, uint16_t duration);
 
+
+    void calibrate();                                                                                                                                                                      
   private:
     int pinCS;
     int pinPDN;
@@ -114,6 +120,8 @@ class Eve2Display {
     void wr8(uint32_t address, uint8_t parameter);
     void wr16(uint32_t address, uint16_t parameter);
     void wr32(uint32_t address, uint32_t parameter);
+    void wrBuf(uint32_t address, uint8_t * buf, uint8_t len);
+
     uint8_t rd8(uint32_t address);
     uint16_t rd16(uint32_t address);
     uint32_t rd32(uint32_t address);
@@ -124,6 +132,15 @@ class Eve2Display {
     uint16_t  ramCommandOffset; // this is in bytes on 4 byte boundary
         // offset from RAM_CMD where next command is written 
         // after dlswap is sent, REG_CMD_WRITE is set to this, co-processor starts processing commands
+
+    void touchUpload(void);
+    uint16_t coProcFifoFreeSpace(void);
+    void coProcFifoFreeSpaceWait(uint32_t room);
+    void coProcFifoUpdate(void);
+    void coProcFifoEmptyWait(void);
+    void coProcCmdBufWrite(const uint8_t * buff, uint32_t count);
+    uint16_t coProcFifoWriteLocation;
+
 };
 
 #endif

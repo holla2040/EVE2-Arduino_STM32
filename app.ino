@@ -26,28 +26,17 @@ char navTabEntries[][NAVTABENTRYLEN] = {"Home","Run","System","Control","Relays"
 // Eve2Display(int cs, int pdn, int interrupt); 
 Eve2Display display(PB4,PB3,PB5);
 
-#define PIN_SPEAKER PA4
-#define DURATION    250
-
-void beep() {
-  uint32_t timeout = millis() + 50;
-  
-  while (millis() < timeout) {
-    digitalWrite(PIN_SPEAKER, HIGH);
-    delayMicroseconds(DURATION);
-    digitalWrite(PIN_SPEAKER, LOW);
-    delayMicroseconds(DURATION);
-  }
-}
-
-
 void setup() {
   afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
   console.begin(115200);
   console.println("\x1B[2J\x1b[H");
   console.println("EVE2-Arduino_STM32 setup");
 
+  pinMode(PC13,OUTPUT);
+
   display.begin();
+  display.tone(2000,20);
+  // display.calibrate();
 
   display.dlStart();
   display.romfont(1,31);
@@ -69,6 +58,8 @@ void setup() {
   //primitives();
   //rect();
   statusSetup();
+
+
 
 }
 
@@ -254,7 +245,7 @@ void buttonLoop() {
   if (now > touchTimeout) {
     uint8_t t = display.touched();
     if (t) {
-      beep();
+      display.tone(2000,20);
       sprintf(line,"%-6d touch %d",now);
       console.println(line);
     }
@@ -537,7 +528,7 @@ void navBarLoop() {
     uint8_t t = display.touched();
     if (t) {
       navTabSelected = t-1;
-      beep();
+      display.tone(2000,20);
       sprintf(line,"%-6d touch %d",now,navTabSelected);
       console.println(line);
       navBarSetup(); 
@@ -620,7 +611,7 @@ void statusLoop() {
     uint8_t t = display.touched();
     if (t) {
       navTabSelected = t-1;
-      beep();
+      display.tone(2000,20);
       sprintf(line,"%-6d touch %d",now,navTabSelected);
       console.println(line);
     }

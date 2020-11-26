@@ -21,6 +21,8 @@
 #define HCMD_CORERESET   0x68
 
 #define CHIP_ID              0x000C0000
+#define REG_COPRO_PATCH_PTR  0x7162
+#define RAM_ERR_REPORT       0x309800 // max 128 bytes null terminated string
 
 #define CMD_APPEND           0xFFFFFF1E
 #define CMD_BGCOLOR          0xFFFFFF09
