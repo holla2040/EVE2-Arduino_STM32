@@ -4,6 +4,7 @@
 
 //User selectable configurations.
 #define EVE2_70
+#define TOUCH_CAPACITIVE
 //#define EVE2_50
 //#define EVE2_43
 //#define EVE2_38
@@ -19,6 +20,8 @@
 #define HCMD_CLK48M      0x62
 #define HCMD_CLK36M      0x61
 #define HCMD_CORERESET   0x68
+
+#define MATRIXORBITAL
 
 #define CHIP_ID              0x000C0000
 

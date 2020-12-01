@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "Eve2Display.h"
+#include "SPI.h"
 
 #define console Serial4
 PROGMEM uint8_t font[] = 
 #include "font.h"
 ;
 
+
+extern uint8_t  smiley[];
+extern uint32_t smileylen;
 
 int inc = 2;
 int i = 0;
@@ -44,7 +48,8 @@ void beep() {
 void setup() {
   afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
   console.begin(115200);
-  console.println("\x1B[2J\x1b[H");
+  console.print("\x1B[2J\x1b[H");
+  delay(100);
   console.println("EVE2-Arduino_STM32 setup");
 
   display.begin();
@@ -59,16 +64,18 @@ void setup() {
   display.dlEnd();
 
   // fontSetup();
-  // buttonSetup();
+  buttonSetup();
   // circleSetup();
 
-  navBarSetup();
+  // navBarSetup();
+
+  //imgSetup();
 
 //  pinMode(PIN_SPEAKER, OUTPUT);
   console.println("setup done");
   //primitives();
   //rect();
-  statusSetup();
+  //statusSetup();
 
 }
 
@@ -79,7 +86,8 @@ void loop() {
   //navBarLoop();
   //loopAll();
   //rect();
-  statusLoop();
+  //statusLoop();
+  buttonLoop();
 }
 
 void loopAll() {
@@ -206,7 +214,7 @@ void number() {
 
 void buttonSetup() {
   display.dlStart();
-  // display.rotate(2);
+  display.rotate(3);
   display.cmd(CLEAR(1,1,1));
   display.cmd(COLOR_RGB(0xFFFFFF));
 
@@ -627,4 +635,33 @@ void statusLoop() {
     touchTimeout = now + 200;
     statusSetup(); 
   }
+}
+
+void imgSetup() {
+  console.println("imgSetup");
+
+  display.spiEnable();
+  SPI.write(0x24);
+  SPI.write(0xFF);
+  SPI.write(0xFF);
+  SPI.write(0xFF);
+
+  SPI.write(0); SPI.write(0); SPI.write(0); SPI.write(0); 
+  SPI.write(0); SPI.write(0); SPI.write(0); SPI.write(0); 
+
+  console.println("imgSetup 1");
+  console.println(smileylen);
+  SPI.write((uint8_t *)&smiley,smileylen);
+  console.println("imgSetup 2");
+  display.spiDisable();
+
+  display.dlStart();
+  display.clear(RED);
+  // display.cmd(COLOR_RGB(0x7F2020));
+  display.cmd(BEGIN(BITMAPS));
+  display.cmd(VERTEX2II(100,100,0,0));
+  display.dlEnd();
+
+  console.println("imgSetup while");
+  while (1) {};
 }

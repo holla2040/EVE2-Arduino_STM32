@@ -55,6 +55,7 @@ class Eve2Display {
     void dlStart();
     void dlEnd();
     void cmd(uint32_t command);
+    void calibrate();
 
     /* debug */
     void test();
@@ -75,6 +76,8 @@ class Eve2Display {
 
     /* widgets */
     void romfont(uint32_t font, uint32_t romslot);
+    void loadimage(uint32_t ptr, uint32_t options);
+    void drawramimage(uint32_t ptr, uint32_t options, uint16_t x, uint16_t y);
     void clear(uint32_t color);
     void fgcolor(uint32_t color);
     void bgcolor(uint32_t color);
@@ -100,6 +103,8 @@ class Eve2Display {
 
     void rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t borderWidth, uint8_t borderRadius, uint32_t borderColor, uint32_t backgroundColor);
 
+    void spiEnable();
+    void spiDisable();
 
   private:
     int pinCS;
@@ -117,13 +122,15 @@ class Eve2Display {
     uint8_t rd8(uint32_t address);
     uint16_t rd16(uint32_t address);
     uint32_t rd32(uint32_t address);
-    void spiEnable();
-    void spiDisable();
     uint32_t  commands[4096/8]; // buffer for commands
     uint16_t  commandIndex;     // index to next write location
     uint16_t  ramCommandOffset; // this is in bytes on 4 byte boundary
         // offset from RAM_CMD where next command is written 
         // after dlswap is sent, REG_CMD_WRITE is set to this, co-processor starts processing commands
+    void capTouchUpload(void);
+    void coProWrCmdBuf(const uint8_t *buff, uint32_t count);
+    void wait4CoProFIFO(uint32_t room);
+    uint16_t CoProFIFO_FreeSpace(void);
 };
 
 #endif
